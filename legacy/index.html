@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adel Mithaiwala — ML/AI Engineer</title>
+<meta name="description" content="Adel Mithaiwala — CS with Management graduate (King's College London, first-class), building ML/AI systems from first principles. From-scratch GPT, bilingual RAG, agent loops.">
+<style>
+  :root {
+    --bg: #0a0c12;
+    --bg-alt: #12151f;
+    --card: rgba(255, 255, 255, 0.035);
+    --card-strong: rgba(255, 255, 255, 0.055);
+    --glass-border: rgba(255, 255, 255, 0.09);
+    --glass-highlight: rgba(255, 255, 255, 0.14);
+    --text: #e8eaf1;
+    --text-dim: #9aa3b8;
+    --accent: #3fd6b3;
+    --accent2: #7c8cf8;
+    --accent-dim: rgba(63, 214, 179, 0.35);
+    --grad: linear-gradient(100deg, #3fd6b3, #7c8cf8);
+    --shadow: 0 12px 40px rgba(0, 0, 0, 0.35);
+    --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  [data-theme="light"] {
+    --bg: #f4f5f9;
+    --bg-alt: #eceef4;
+    --card: rgba(255, 255, 255, 0.6);
+    --card-strong: rgba(255, 255, 255, 0.85);
+    --glass-border: rgba(20, 30, 60, 0.1);
+    --glass-highlight: rgba(255, 255, 255, 0.9);
+    --text: #171b26;
+    --text-dim: #59627a;
+    --accent: #0b8f6c;
+    --accent2: #4f5fd8;
+    --accent-dim: rgba(11, 143, 108, 0.35);
+    --grad: linear-gradient(100deg, #0b8f6c, #4f5fd8);
+    --shadow: 0 12px 40px rgba(30, 40, 80, 0.12);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.65;
+    font-size: 16.5px;
+    -webkit-font-smoothing: antialiased;
+    transition: background .3s, color .3s;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  ::selection { background: var(--accent-dim); }
+
+  /* ambient background blobs behind content below the hero */
+  .ambient {
+    position: fixed; inset: 0; z-index: -2; pointer-events: none;
+    background:
+      radial-gradient(600px 400px at 85% 20%, color-mix(in srgb, var(--accent2) 7%, transparent), transparent 70%),
+      radial-gradient(700px 500px at 10% 70%, color-mix(in srgb, var(--accent) 6%, transparent), transparent 70%);
+  }
+
+  /* ===== nav — liquid glass ===== */
+  nav {
+    position: fixed; top: 14px; left: 0; right: 0; z-index: 50;
+    pointer-events: none;
+  }
+  nav .bar {
+    pointer-events: auto;
+    max-width: 900px; margin: 0 auto;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 9px 20px;
+    border-radius: 16px;
+    background: color-mix(in srgb, var(--bg) 55%, transparent);
+    backdrop-filter: blur(18px) saturate(1.4);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 0 var(--glass-highlight), 0 8px 32px rgba(0,0,0,.18);
+  }
+  @media (max-width: 948px) { nav { padding: 0 12px; } }
+  nav .brand { font-family: var(--mono); font-size: 14px; color: var(--text); text-decoration: none; font-weight: 600; }
+  nav .brand span { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  nav ul { display: flex; gap: 20px; list-style: none; align-items: center; }
+  nav ul a { color: var(--text-dim); text-decoration: none; font-size: 14px; transition: color .2s; }
+  nav ul a:hover { color: var(--accent); }
+  #themeToggle {
+    background: none; border: 1px solid var(--glass-border); color: var(--text-dim);
+    border-radius: 8px; padding: 4px 10px; cursor: pointer; font-size: 13px;
+    transition: color .2s, border-color .2s;
+  }
+  #themeToggle:hover { color: var(--accent); border-color: var(--accent-dim); }
+
+  /* ===== hero with shader gradient ===== */
+  header {
+    position: relative;
+    min-height: 92vh;
+    display: flex; align-items: center;
+    overflow: hidden;
+  }
+  #shader, .hero-fallback {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    z-index: -1;
+  }
+  .hero-fallback {
+    display: none;
+    background:
+      radial-gradient(55% 60% at 25% 30%, color-mix(in srgb, var(--accent) 22%, transparent), transparent 70%),
+      radial-gradient(50% 55% at 80% 25%, color-mix(in srgb, var(--accent2) 20%, transparent), transparent 70%),
+      radial-gradient(60% 60% at 60% 85%, color-mix(in srgb, var(--accent2) 12%, transparent), transparent 70%),
+      var(--bg);
+  }
+  header .veil {
+    position: absolute; inset: 0; z-index: -1;
+    background: linear-gradient(to bottom, transparent 55%, var(--bg) 98%);
+  }
+  header .wrap { padding-top: 90px; padding-bottom: 60px; }
+  .kicker {
+    font-family: var(--mono); font-size: 13.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 18px;
+  }
+  h1 {
+    font-size: clamp(38px, 7vw, 66px);
+    line-height: 1.05; letter-spacing: -0.03em; font-weight: 750;
+    margin-bottom: 22px;
+  }
+  h1 .grad { background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .lede { color: var(--text-dim); max-width: 660px; font-size: 18.5px; margin-bottom: 14px; }
+  .lede strong { color: var(--text); font-weight: 600; }
+  .status {
+    display: inline-flex; align-items: center; gap: 9px;
+    margin-top: 22px; padding: 9px 18px;
+    border-radius: 999px; font-size: 14px; color: var(--text);
+    background: var(--card-strong);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border);
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
+  }
+  .status .dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 10px var(--accent);
+    animation: pulse 2.4s ease-in-out infinite;
+  }
+  @keyframes pulse { 50% { opacity: .45; } }
+
+  /* ===== sections ===== */
+  section { padding: 72px 0 40px; position: relative; }
+  h2 {
+    font-size: clamp(24px, 3.5vw, 32px); letter-spacing: -0.02em; margin-bottom: 8px; font-weight: 700;
+  }
+  .sec-sub { color: var(--text-dim); margin-bottom: 38px; max-width: 640px; }
+  .sec-tag {
+    font-family: var(--mono); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase;
+    color: var(--accent); margin-bottom: 10px;
+  }
+
+  /* ===== project cards — glass ===== */
+  .project {
+    position: relative;
+    background: var(--card);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--glass-border);
+    border-radius: 20px;
+    padding: 34px 36px;
+    margin-bottom: 36px;
+    box-shadow: inset 0 1px 0 var(--glass-highlight), var(--shadow);
+    transition: transform .3s ease, border-color .3s ease;
+  }
+  .project:hover { transform: translateY(-3px); border-color: var(--accent-dim); }
+  .project::before {
+    content: ""; position: absolute; inset: -1px; border-radius: 20px; padding: 1px;
+    background: linear-gradient(135deg, var(--accent-dim), transparent 30%, transparent 70%, color-mix(in srgb, var(--accent2) 30%, transparent));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor; mask-composite: exclude;
+    pointer-events: none; opacity: 0; transition: opacity .3s;
+  }
+  .project:hover::before { opacity: 1; }
+  .project h3 { font-size: 23px; letter-spacing: -0.015em; margin-bottom: 4px; }
+  .project .tagline { color: var(--text-dim); font-size: 15px; margin-bottom: 16px; }
+  .project .links { margin-bottom: 18px; }
+  .project .links a {
+    display: inline-block;
+    font-family: var(--mono); font-size: 13px; color: var(--accent);
+    text-decoration: none; padding: 6px 14px; border-radius: 999px;
+    border: 1px solid var(--accent-dim);
+    background: color-mix(in srgb, var(--accent) 7%, transparent);
+    transition: background .2s;
+  }
+  .project .links a:hover { background: color-mix(in srgb, var(--accent) 15%, transparent); }
+  .project p { margin-bottom: 14px; }
+  .project p:last-child { margin-bottom: 0; }
+  .project h4 {
+    font-size: 12.5px; font-family: var(--mono); color: var(--text-dim);
+    text-transform: uppercase; letter-spacing: .12em; margin: 26px 0 10px;
+  }
+  code {
+    font-family: var(--mono); font-size: .88em;
+    background: var(--bg-alt); border: 1px solid var(--glass-border);
+    border-radius: 5px; padding: 1.5px 6px;
+  }
+  pre {
+    font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    background: color-mix(in srgb, var(--bg) 70%, transparent);
+    border: 1px solid var(--glass-border); border-radius: 12px;
+    padding: 18px 20px; overflow-x: auto; margin-bottom: 14px; color: var(--text-dim);
+  }
+  pre .hl { color: var(--accent); }
+
+  table { border-collapse: collapse; width: 100%; margin: 6px 0 14px; font-size: 14.5px; }
+  th, td { text-align: left; padding: 8px 12px; border-bottom: 1px solid var(--glass-border); }
+  th { font-family: var(--mono); font-size: 12px; color: var(--text-dim); text-transform: uppercase; letter-spacing: .07em; }
+  td strong { color: var(--accent); }
+  .tablewrap { overflow-x: auto; }
+
+  figure { margin: 20px 0 6px; }
+  figure img {
+    width: 100%; border-radius: 12px; border: 1px solid var(--glass-border);
+    background: #fff; display: block;
+  }
+  figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
+  .figrow { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .figrow { grid-template-columns: 1fr; } }
+
+  /* more projects */
+  .mini {
+    background: var(--card);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border); border-radius: 16px;
+    padding: 22px 26px; margin-bottom: 16px;
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
+    transition: transform .25s ease, border-color .25s ease;
+  }
+  .mini:hover { transform: translateY(-2px); border-color: var(--accent-dim); }
+  .mini h3 { font-size: 17px; margin-bottom: 4px; }
+  .mini p { color: var(--text-dim); font-size: 15px; margin-bottom: 10px; }
+  .mini a { font-family: var(--mono); font-size: 13px; color: var(--accent); text-decoration: none; }
+  .mini a:hover { text-decoration: underline; }
+
+  /* skills */
+  .skillgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 18px; }
+  .skill {
+    background: var(--card);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border: 1px solid var(--glass-border); border-radius: 16px;
+    padding: 22px 24px;
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
+    transition: transform .25s ease, border-color .25s ease;
+  }
+  .skill:hover { transform: translateY(-2px); border-color: var(--accent-dim); }
+  .skill h3 { font-size: 15.5px; margin-bottom: 8px; background: var(--grad); -webkit-background-clip: text; background-clip: text; color: transparent; display: inline-block; }
+  .skill p { font-size: 14.5px; color: var(--text-dim); }
+
+  /* contact */
+  .contact-links { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 24px; }
+  .contact-links a {
+    font-family: var(--mono); font-size: 14.5px; color: var(--text);
+    border: 1px solid var(--glass-border); border-radius: 12px; padding: 12px 20px;
+    text-decoration: none;
+    background: var(--card-strong);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    box-shadow: inset 0 1px 0 var(--glass-highlight);
+    transition: transform .2s ease, border-color .2s ease, color .2s ease;
+  }
+  .contact-links a:hover { border-color: var(--accent-dim); color: var(--accent); transform: translateY(-2px); }
+
+  footer { padding: 48px 0 56px; color: var(--text-dim); font-size: 13.5px; border-top: 1px solid var(--glass-border); margin-top: 64px; }
+
+  /* scroll reveal */
+  .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+    .status .dot { animation: none; }
+    .project, .mini, .skill, .contact-links a { transition: none; }
+  }
+
+  @media (max-width: 640px) {
+    nav ul li.hidemobile { display: none; }
+    .project { padding: 24px 20px; }
+    header { min-height: 78vh; }
+  }
+</style>
+</head>
+<body>
+
+<div class="ambient" aria-hidden="true"></div>
+
+<nav>
+  <div class="bar">
+    <a class="brand" href="#top">adel<span>@</span>mithaiwala</a>
+    <ul>
+      <li><a href="#projects">Projects</a></li>
+      <li class="hidemobile"><a href="#skills">Skills</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><button id="themeToggle" aria-label="Toggle theme">◐</button></li>
+    </ul>
+  </div>
+</nav>
+
+<header id="top">
+  <canvas id="shader" aria-hidden="true"></canvas>
+  <div class="hero-fallback" aria-hidden="true"></div>
+  <div class="veil" aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="kicker reveal">ML/AI Engineer · London</div>
+    <h1 class="reveal">Adel <span class="grad">Mithaiwala</span></h1>
+    <p class="lede reveal">I build ML systems from first principles and evaluate them before I trust them — a GPT written in raw PyTorch, a bilingual English/Arabic RAG system with a measured abstention guarantee, an agent loop with no framework.</p>
+    <p class="lede reveal">First-class BSc (Hons) <strong>Computer Science with Management</strong>, King's College London (with distinction). Previously an intern on <strong>KPMG's AI team</strong>. Starting an AI/ML master's soon.</p>
+    <div class="status reveal"><span class="dot"></span>Open to a one-year ML/AI engineering role before my master's</div>
+  </div>
+</header>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="sec-tag reveal">01 — Work</div>
+    <h2 class="reveal">Featured projects</h2>
+    <p class="sec-sub reveal">Three projects, built end to end. Every number below is a real, reproducible artifact from the linked repository — training curves, eval tables, screenshots.</p>
+
+    <!-- ============ RAG ============ -->
+    <article class="project reveal">
+      <h3>Bilingual RAG over Bahrain's labour authority (LMRA)</h3>
+      <div class="tagline">Cross-lingual retrieval + cite-or-abstain guardrails over official English/Arabic government content</div>
+      <div class="links">
+        <a href="https://github.com/Adel-10/lmra-bilingual-rag" target="_blank" rel="noopener">github.com/Adel-10/lmra-bilingual-rag →</a>
+      </div>
+
+      <p>A retrieval-augmented assistant that answers questions about Bahraini work permits and labour services in English or Arabic, retrieving from a corpus that contains both — because some authoritative content (board resolutions, several laws) exists only in Arabic. Every answer cites the official page it came from; when the corpus doesn't cover a question, the system abstains with a fixed template instead of guessing.</p>
+
+      <h4>Architecture</h4>
+      <pre>crawl (manifest-driven, EN+AR) → extract (deterministic, structure-preserving)
+  → chunk (section-aware, tables atomic) → embed (<span class="hl">BGE-M3</span>, shared EN/AR space)
+  → retrieve (bilingual query expansion, exact cosine via one matmul)
+  → gate (relevance threshold → hard abstention)
+  → generate (grounding-only prompt, [n] citations)
+  → post-check (citation mapping; NOT_IN_SOURCES marker → fixed template)</pre>
+
+      <p>The technically interesting part is cross-lingual retrieval in one shared embedding space. Measured on this corpus: parallel EN/AR chunk pairs sit at mean cosine <strong>0.781</strong> vs <strong>0.548</strong> for random cross-language pairs — meaning dominates the geometry, language barely registers. The hardest case (casual English questions against Arabic-only legal prose) initially failed, and was fixed with query-time bilingual expansion: translate the query, embed both versions, score chunks by the max — so no LLM-generated text ever enters the index of a civic-information system.</p>
+
+      <p>Abstention is enforced structurally, in three layers: a retrieval-score gate (below threshold, the LLM is never called), a grounding-only prompt with an explicit refusal marker, and a citation post-check. Refusals display a deterministic template, never model prose — testing showed the model names other authorities even when instructed not to.</p>
+
+      <h4>Evaluation — 39 cases, LLM-judged faithfulness</h4>
+      <div class="tablewrap">
+      <table>
+        <tr><th>metric</th><th>overall</th><th>EN</th><th>AR</th><th>cross-lingual</th></tr>
+        <tr><td>retrieval hit@6</td><td><strong>33/33</strong></td><td>18/18</td><td>15/15</td><td>9/9</td></tr>
+        <tr><td>citation correct</td><td><strong>33/33</strong></td><td>18/18</td><td>15/15</td><td>9/9</td></tr>
+        <tr><td>faithfulness SUPPORTED</td><td><strong>32/33</strong></td><td>17/18</td><td>15/15</td><td>9/9</td></tr>
+        <tr><td>abstained on out-of-corpus</td><td><strong>6/6</strong></td><td>3/3</td><td>3/3</td><td>—</td></tr>
+        <tr><td>false abstention</td><td><strong>0/33</strong></td><td>0/18</td><td>0/15</td><td>0/9</td></tr>
+      </table>
+      </div>
+      <p>Because that table is measured on cases the system was iterated against, a held-out set of 15 fresh questions was run exactly once, results reported as-is: retrieval 12/12, citations 10/10, faithfulness 10/10, cross-lingual 3/3 — and 2/12 false abstentions on two-part questions, an honest cost of the safety-first refusal policy, documented rather than tuned away. The eval harness caught two real bugs during development: a chunking bug that silently dropped section headings (making entire FAQ questions unretrievable) and a misattributed hotline number that no string metric would have flagged.</p>
+
+      <div class="figrow">
+        <figure>
+          <img src="assets/English-prompt.png" alt="English question answered with citations from both English and Arabic sources" loading="lazy">
+          <figcaption>English question, bilingual sources — note the AR badge on citation [1]: the answer assembles from whichever language version ranks best.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/Out-of-corpus-prompt.png" alt="Out-of-corpus question triggering the fixed abstention template" loading="lazy">
+          <figcaption>Out-of-corpus question → deterministic abstention template, no improvisation.</figcaption>
+        </figure>
+      </div>
+
+      <h4>Stack</h4>
+      <p>Python, BGE-M3 embeddings (sentence-transformers), Anthropic API (generation + LLM judge), FastAPI, single-file React chat UI, custom crawler/extractor — no vector DB by choice: 1,133 chunks × 1024 dims is one visible matmul.</p>
+    </article>
+
+    <!-- ============ GPT ============ -->
+    <article class="project reveal">
+      <h3>shakespeare-gpt — a GPT from scratch in raw PyTorch</h3>
+      <div class="tagline">No HuggingFace, no transformer libraries: every component implemented from first principles</div>
+      <div class="links">
+        <a href="https://github.com/Adel-10/shakespeare-gpt" target="_blank" rel="noopener">github.com/Adel-10/shakespeare-gpt →</a>
+      </div>
+
+      <p>A character-level GPT built and trained from scratch: tokenizer, token/position embeddings, multi-head causal self-attention, pre-norm residual transformer blocks, the training loop, and the sampler are all hand-written PyTorch. Training uses AdamW with LR warmup + cosine decay, weight tying, dropout, gradient clipping, and early stopping on validation loss; sampling supports temperature, top-k, top-p and greedy decoding.</p>
+
+      <h4>Results</h4>
+      <div class="tablewrap">
+      <table>
+        <tr><th>model</th><th>params</th><th>corpus</th><th>best val loss</th><th>perplexity</th><th>vs. random (61)</th></tr>
+        <tr><td>Baseline</td><td>0.8M</td><td>98K chars</td><td>1.59</td><td>4.9</td><td>−61%</td></tr>
+        <tr><td>Scaled (full corpus)</td><td>11M</td><td>1.1M chars</td><td><strong>1.47</strong></td><td><strong>4.4</strong></td><td><strong>−65%</strong></td></tr>
+      </table>
+      </div>
+      <p>The instructive result is the comparison: on the 98K-character slice the small model overfits — validation loss bottoms at 1.59 and climbs to 2.21 as it memorizes. Trained on the full 1.1M-character corpus, the 11M-parameter model reaches <strong>validation perplexity 4.36 (loss 1.47)</strong> with only a mild train/val gap (~0.30), held in check by dropout and early stopping. Scaling the data ~11× is what turns memorization into generalization.</p>
+
+      <div class="figrow">
+        <figure>
+          <img src="assets/training_curve_full.png" alt="Training curve of the 10.7M-parameter model: train and validation cross-entropy vs iteration, best val 1.47" loading="lazy">
+          <figcaption>Training curve, 10.7M params on the full corpus. Best validation checkpoint (1.47) saved by early stopping.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/attention_matrix.png" alt="Causal self-attention weight matrix visualization" loading="lazy">
+          <figcaption>Learned causal self-attention weights — one of several explanatory figures generated by the project.</figcaption>
+        </figure>
+      </div>
+
+      <h4>Stack</h4>
+      <p>Python, PyTorch (only), matplotlib for diagnostics. Auto-selects CUDA / Apple-Silicon MPS / CPU. Inspired by Karpathy's nanoGPT, reimplemented from scratch as a learning exercise.</p>
+    </article>
+
+    <!-- ============ Agent ============ -->
+    <article class="project reveal">
+      <h3>minimal-agent — an LLM agent loop with no framework</h3>
+      <div class="tagline">Plan → execute (with tools) → reflect, in ~230 lines of pure Python</div>
+      <div class="links">
+        <a href="https://github.com/Adel-10/minimal-agent" target="_blank" rel="noopener">github.com/Adel-10/minimal-agent →</a>
+      </div>
+
+      <p>A working agent built to understand what an "agent" actually is: sequenced LLM calls with different system prompts sharing one piece of state (the message history). No LangChain — just the <code>anthropic</code> SDK. It's structured as three runnable stages, each adding one concept, so you can <code>diff</code> consecutive files to see exactly what "tools + a loop" and "reflection" cost in code.</p>
+
+      <p>Design decisions worth calling out: tools return errors as data, not exceptions — an error string goes back into the message history where the model reads it and retries, which is the difference between a brittle loop and a self-healing one. Reflection is a separate call with a clean transcript and the real tool-call log, because a model reviewing its own in-context answer rubber-stamps it — and the tool log lets the reviewer catch the model quietly doing mental math instead of calling the calculator. The calculator itself parses an AST and whitelists arithmetic nodes rather than calling <code>eval()</code> on model output.</p>
+
+      <h4>Stack</h4>
+      <p>Python, Anthropic SDK. Hard caps on turns and reflection rounds keep the loop bounded.</p>
+    </article>
+
+    <div class="sec-tag reveal" style="margin-top:30px">02 — Also built</div>
+    <h2 class="reveal" style="font-size:22px">More projects</h2>
+    <div style="height:18px"></div>
+    <div class="mini reveal">
+      <h3>ci-k8s — CI/CD pipeline to Kubernetes</h3>
+      <p>A Node.js service taken through a full pipeline: Jenkins builds and tags a Docker image by git SHA, pushes to a registry, and rolls it out to a Kubernetes Deployment (2 replicas, readiness/liveness probes) behind a Service.</p>
+      <a href="https://github.com/Adel-10/ci-k8s" target="_blank" rel="noopener">github.com/Adel-10/ci-k8s →</a>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="sec-tag reveal">03 — Capabilities</div>
+    <h2 class="reveal">Skills — as demonstrated above</h2>
+    <p class="sec-sub reveal">Grounded in the projects on this page, not a keyword list.</p>
+    <div class="skillgrid">
+      <div class="skill reveal">
+        <h3>Deep learning fundamentals</h3>
+        <p>Transformer internals written by hand in PyTorch: attention, embeddings, LR schedules, regularization, early stopping — and the diagnostics to reason about overfitting vs generalization.</p>
+      </div>
+      <div class="skill reveal">
+        <h3>Retrieval &amp; embeddings</h3>
+        <p>Multilingual dense retrieval (BGE-M3), cosine-similarity search, section-aware chunking, query expansion, and measuring embedding-space geometry rather than assuming it.</p>
+      </div>
+      <div class="skill reveal">
+        <h3>LLM systems &amp; guardrails</h3>
+        <p>Grounded generation with citations, structural (not instructional) abstention guarantees, agent/tool-use loops, prompt design, Anthropic API.</p>
+      </div>
+      <div class="skill reveal">
+        <h3>Evaluation</h3>
+        <p>Eval harnesses as first-class deliverables: deterministic metrics + LLM-as-judge faithfulness, held-out test sets, abstention measured in both directions. Evals that caught real bugs.</p>
+      </div>
+      <div class="skill reveal">
+        <h3>Engineering</h3>
+        <p>Python, PyTorch, FastAPI, React, JavaScript; polite crawlers, deterministic HTML extraction, data pipelines; Git/GitHub throughout.</p>
+      </div>
+      <div class="skill reveal">
+        <h3>Delivery &amp; ops</h3>
+        <p>Docker, Kubernetes (Deployments, Services, probes), Jenkins CI/CD; plus the business grounding of a CS-with-Management degree and a KPMG AI-team internship.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="sec-tag reveal">04 — Get in touch</div>
+    <h2 class="reveal">Contact</h2>
+    <p class="sec-sub reveal">I'm looking for a one-year ML/AI engineering role starting soon, before I begin an AI/ML master's. If any of the work above is relevant to your team, I'd like to hear from you.</p>
+    <div class="contact-links reveal">
+      <a href="mailto:adelaziz1311@gmail.com">email → adelaziz1311@gmail.com</a>
+      <a href="https://github.com/Adel-10" target="_blank" rel="noopener">github → Adel-10</a>
+      <a href="#" id="linkedinLink">linkedin → (add your URL)</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    Adel Mithaiwala · Built by hand — plain HTML/CSS/JS and one hand-written WebGL shader; no frameworks, no trackers. All figures and numbers are real artifacts from the linked repositories.
+  </div>
+</footer>
+
+<script>
+(function () {
+  // ---------- theme ----------
+  const mq = q => (window.matchMedia ? window.matchMedia(q).matches : false);
+  const root = document.documentElement;
+  const btn = document.getElementById('themeToggle');
+  let theme = mq('(prefers-color-scheme: light)') ? 'light' : 'dark';
+  function applyTheme() {
+    if (theme === 'light') root.setAttribute('data-theme', 'light');
+    else root.removeAttribute('data-theme');
+    setShaderPalette();
+  }
+  btn.addEventListener('click', () => { theme = theme === 'dark' ? 'light' : 'dark'; applyTheme(); });
+
+  // ---------- scroll reveal ----------
+  const reduced = mq('(prefers-reduced-motion: reduce)');
+  if (!reduced && 'IntersectionObserver' in window) {
+    const io = new IntersectionObserver((entries) => {
+      for (const e of entries) if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    }, { threshold: 0.08 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  } else {
+    document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+  }
+
+  // ---------- shader gradient hero (inspired by ShaderGradient) ----------
+  const canvas = document.getElementById('shader');
+  const fallback = document.querySelector('.hero-fallback');
+  let gl = null, program = null, raf = null, heroVisible = true;
+  let palette = { dark: null, light: null };
+
+  // color palettes: 4 vec3s each (base + three blobs)
+  palette.dark = [
+    0.040, 0.047, 0.071,   // base  #0a0c12
+    0.075, 0.310, 0.265,   // deep teal
+    0.165, 0.180, 0.485,   // indigo
+    0.235, 0.130, 0.400    // violet
+  ];
+  palette.light = [
+    0.957, 0.961, 0.976,   // base  #f4f5f9
+    0.700, 0.900, 0.845,   // mint
+    0.780, 0.800, 0.975,   // periwinkle
+    0.880, 0.820, 0.960    // lilac
+  ];
+
+  const vsrc = 'attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }';
+  const fsrc = [
+    'precision highp float;',
+    'uniform vec2 u_res;',
+    'uniform float u_t;',
+    'uniform vec3 u_c0, u_c1, u_c2, u_c3;',
+    'void main(){',
+    '  vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;',
+    // gentle domain warp for the liquid feel
+    '  uv += 0.16 * vec2(sin(uv.y * 2.6 + u_t * 0.35), cos(uv.x * 2.2 - u_t * 0.28));',
+    '  uv += 0.06 * vec2(sin(uv.y * 7.0 - u_t * 0.6), cos(uv.x * 6.0 + u_t * 0.5));',
+    // three drifting blob centers
+    '  vec2 p1 = 0.75 * vec2(sin(u_t * 0.21), cos(u_t * 0.17)) + vec2(-0.35, 0.18);',
+    '  vec2 p2 = 0.65 * vec2(cos(u_t * 0.16 + 2.1), sin(u_t * 0.23 + 1.3)) + vec2(0.55, -0.05);',
+    '  vec2 p3 = 0.70 * vec2(sin(u_t * 0.13 + 4.2), cos(u_t * 0.19 + 3.1)) + vec2(0.05, -0.30);',
+    '  float w1 = exp(-2.6 * dot(uv - p1, uv - p1));',
+    '  float w2 = exp(-2.9 * dot(uv - p2, uv - p2));',
+    '  float w3 = exp(-2.4 * dot(uv - p3, uv - p3));',
+    '  vec3 col = u_c0;',
+    '  col = mix(col, u_c1, min(w1, 1.0));',
+    '  col = mix(col, u_c2, min(w2, 1.0));',
+    '  col = mix(col, u_c3, min(w3, 1.0));',
+    // fine grain to avoid banding
+    '  float g = fract(sin(dot(gl_FragCoord.xy, vec2(12.9898, 78.233))) * 43758.5453);',
+    '  col += (g - 0.5) * 0.012;',
+    '  gl_FragColor = vec4(col, 1.0);',
+    '}'
+  ].join('\n');
+
+  function initShader() {
+    if (reduced) return false;
+    gl = canvas.getContext('webgl', { antialias: false, alpha: false, powerPreference: 'low-power' });
+    if (!gl) return false;
+    function compile(type, src) {
+      const s = gl.createShader(type);
+      gl.shaderSource(s, src); gl.compileShader(s);
+      if (!gl.getShaderParameter(s, gl.COMPILE_STATUS)) return null;
+      return s;
+    }
+    const vs = compile(gl.VERTEX_SHADER, vsrc);
+    const fs = compile(gl.FRAGMENT_SHADER, fsrc);
+    if (!vs || !fs) return false;
+    program = gl.createProgram();
+    gl.attachShader(program, vs); gl.attachShader(program, fs); gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) return false;
+    gl.useProgram(program);
+    const buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 3, -1, -1, 3]), gl.STATIC_DRAW);
+    const loc = gl.getAttribLocation(program, 'p');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+    return true;
+  }
+
+  function setShaderPalette() {
+    if (!gl || !program) return;
+    const c = theme === 'light' ? palette.light : palette.dark;
+    gl.uniform3f(gl.getUniformLocation(program, 'u_c0'), c[0], c[1], c[2]);
+    gl.uniform3f(gl.getUniformLocation(program, 'u_c1'), c[3], c[4], c[5]);
+    gl.uniform3f(gl.getUniformLocation(program, 'u_c2'), c[6], c[7], c[8]);
+    gl.uniform3f(gl.getUniformLocation(program, 'u_c3'), c[9], c[10], c[11]);
+  }
+
+  function resize() {
+    const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    const w = canvas.clientWidth, h = canvas.clientHeight;
+    if (canvas.width !== (w * dpr | 0) || canvas.height !== (h * dpr | 0)) {
+      canvas.width = w * dpr | 0; canvas.height = h * dpr | 0;
+      if (gl) gl.viewport(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  const t0 = performance.now();
+  function frame() {
+    raf = null;
+    if (!heroVisible || document.hidden) return;
+    resize();
+    gl.uniform2f(gl.getUniformLocation(program, 'u_res'), canvas.width, canvas.height);
+    gl.uniform1f(gl.getUniformLocation(program, 'u_t'), (performance.now() - t0) / 1000);
+    gl.drawArrays(gl.TRIANGLES, 0, 3);
+    raf = requestAnimationFrame(frame);
+  }
+  function kick() { if (!raf && gl) raf = requestAnimationFrame(frame); }
+
+  if (initShader()) {
+    setShaderPalette();
+    // pause when hero scrolled away or tab hidden
+    new IntersectionObserver((e) => { heroVisible = e[0].isIntersecting; kick(); }, { threshold: 0 }).observe(canvas);
+    document.addEventListener('visibilitychange', kick);
+    window.addEventListener('resize', resize);
+    kick();
+  } else {
+    canvas.style.display = 'none';
+    fallback.style.display = 'block';
+  }
+
+  applyTheme();
+})();
+</script>
+</body>
+</html>
