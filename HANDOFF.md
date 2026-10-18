@@ -2,17 +2,19 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
-# Portfolio handoff notes — v23 (editable copy deck)
+# Portfolio handoff notes — v23 (external copy deck)
 
 ## What changed in v23
 
-- Added `WEBSITE_COPY.md`, a location-by-location transcription of the current website
-  wording. It covers the six pages, project tables and captions, Skill Signal Board,
-  shared navigation/footer, route metadata, image alt text, and control labels.
+- Exported a Google Docs-compatible copy deck containing a location-by-location
+  transcription of the current website wording. It covers the six pages, project tables
+  and captions, Skill Signal Board, shared navigation/footer, route metadata, image alt
+  text, and control labels.
 - Each section identifies its source component so edits made in the document can be
   applied back to the correct React file without searching or guessing.
 - Image-embedded text is deliberately excluded because it is not HTML copy; its alt
   text and surrounding captions are included.
+- The copy deck is kept outside the repository for editing; `WEBSITE_COPY.md` was removed.
 
 No runtime code changed in v23.
 

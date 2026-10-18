@@ -151,7 +151,6 @@ public/
   favicon.svg              Solid-red, single-candle favicon
   robots.txt               Allows indexing
 legacy/                    Old single-file v2 site, kept for reference
-WEBSITE_COPY.md            Editable map of all visitor-facing, metadata and accessibility copy
 ```
 
 **Key mechanics**
