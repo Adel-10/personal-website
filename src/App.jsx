@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { HashRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Nav from './sections/Nav.jsx';
 import CoolModeZone from './components/CoolModeZone.jsx';
+import RouteMetadata from './components/RouteMetadata.jsx';
 import Home from './pages/Home.jsx';
 import Projects from './pages/Projects.jsx';
 import Skills from './pages/Skills.jsx';
@@ -19,11 +20,21 @@ function ScrollToTop() {
 }
 
 export default function App() {
+  function skipToMain(event) {
+    event.preventDefault();
+    const main = document.getElementById('main-content');
+    if (!main) return;
+    main.focus({ preventScroll: true });
+    main.scrollIntoView({ block: 'start' });
+  }
+
   return (
     <HashRouter>
         <ScrollToTop />
+        <RouteMetadata />
         <div className="ambient" aria-hidden="true" />
         <CoolModeZone />
+        <a className="skip-link" href="#main-content" onClick={skipToMain}>Skip to main content</a>
         <Nav />
         <Routes>
           <Route path="/" element={<Home />} />

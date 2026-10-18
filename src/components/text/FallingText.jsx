@@ -21,17 +21,27 @@ export default function FallingText({ text = '', highlightWords = [], gravity = 
   const [started, setStarted] = useState(false);
   const [runKey, setRunKey] = useState(0);
 
+  function startFromRealPointerMove(event) {
+    if (started || event.pointerType === 'touch') return;
+    // LOCAL PATCH: pointerenter can fire when the pinned title scrolls under a
+    // stationary cursor. Requiring pointer movement keeps this a real hover.
+    setStarted(true);
+  }
+
   // (re)build static word spans — fresh elements carry no leftover inline styles.
-  // Words are HTML-escaped: props are constants today, but this keeps the
-  // component injection-safe if it's ever fed dynamic text.
   useEffect(() => {
     if (!textRef.current) return;
-    const esc = s => s.replace(/[&<>"']/g, ch =>
-      ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-    textRef.current.innerHTML = text.split(' ').map(w => {
-      const hl = highlightWords.some(h => w.startsWith(h));
-      return `<span class="ft-word${hl ? ' ft-highlight' : ''}">${esc(w)}</span>`;
-    }).join(' ');
+    const words = text.split(' ');
+    const fragment = document.createDocumentFragment();
+    words.forEach((word, index) => {
+      if (index > 0) fragment.appendChild(document.createTextNode(' '));
+      const hl = highlightWords.some(h => word.startsWith(h));
+      const span = document.createElement('span');
+      span.className = `ft-word${hl ? ' ft-highlight' : ''}`;
+      span.textContent = word;
+      fragment.appendChild(span);
+    });
+    textRef.current.replaceChildren(fragment);
   }, [text, highlightWords, runKey]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // physics run
@@ -129,7 +139,7 @@ export default function FallingText({ text = '', highlightWords = [], gravity = 
     <span
       className={`falling-text-container ${className}`}
       ref={containerRef}
-      onPointerEnter={() => !started && setStarted(true)}
+      onPointerMove={startFromRealPointerMove}
       title={started ? undefined : 'hover me'}
     >
       <span className="ft-canvas" ref={canvasRef} aria-hidden="true" />

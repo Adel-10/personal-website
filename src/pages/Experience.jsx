@@ -11,15 +11,13 @@ export default function Experience() {
   const main = useRef(null);
   useExperienceScrolly(main);
   return (
-    <main className="page" ref={main}>
+    <main id="main-content" className="page" ref={main} tabIndex="-1">
       <PageHeader
         tag="Experience"
         title={
-          <>
-            <span className="sr-only">Experience</span>
-            <CurvedLoop marqueeText="Experience ✦ KPMG ✦ Batelco ✦ King's ✦" curveAmount={110} />
-          </>
+          <CurvedLoop marqueeText="Experience ✦ KPMG ✦ Batelco ✦ King's ✦" curveAmount={110} />
         }
+        titleLabel="Experience"
         sub="Two rides ahead — professional, then leadership. (Drag the ribbon. Then keep scrolling: this page drives sideways.)"
         background="hyperspeed"
       />

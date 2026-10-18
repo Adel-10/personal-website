@@ -16,6 +16,7 @@ export default function useEducationScrolly(ref) {
     const mm = gsap.matchMedia();
 
     mm.add('(prefers-reduced-motion: no-preference)', () => {
+      const compact = window.matchMedia('(max-width: 640px)').matches;
       // 1. the line draws as you descend
       const fill = q('.edu-line-fill')[0];
       const story = q('.edu-story')[0];
@@ -32,7 +33,10 @@ export default function useEducationScrolly(ref) {
         const body = ms.querySelector('.ms-body');
         if (year) {
           gsap.from(year, {
-            scale: 1.7, opacity: 0, duration: 0.6, ease: 'back.out(1.7)',
+            // A 1.7x centered scale made the phone layout visually wider than
+            // the viewport. Phones get a short lateral pop instead.
+            ...(compact ? { x: -18 } : { scale: 1.7, transformOrigin: 'left center' }),
+            opacity: 0, duration: 0.6, ease: 'back.out(1.7)',
             scrollTrigger: { trigger: ms, start: 'top 78%', toggleActions: 'play none none reverse' }
           });
         }

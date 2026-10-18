@@ -1,3 +1,85 @@
+> **Agents: read `AGENTS.md` first.** It's the current-state brief. This file is the
+> chronological changelog, and older entries describe things since replaced (e.g. the
+> Skills page is now the Skill Signal Board, not the skill tree).
+
+# Portfolio handoff notes — v23 (editable copy deck)
+
+## What changed in v23
+
+- Added `WEBSITE_COPY.md`, a location-by-location transcription of the current website
+  wording. It covers the six pages, project tables and captions, Skill Signal Board,
+  shared navigation/footer, route metadata, image alt text, and control labels.
+- Each section identifies its source component so edits made in the document can be
+  applied back to the correct React file without searching or guessing.
+- Image-embedded text is deliberately excluded because it is not HTML copy; its alt
+  text and surrounding captions are included.
+
+No runtime code changed in v23.
+
+# Portfolio handoff notes — v22 (production-readiness pass)
+
+## What changed in v22
+
+- Added Spline's versioned `unpkg.com` WASM origin to Vercel's CSP. The scene and font
+  policies remain otherwise narrow; Roboto Flex is still local.
+- Replaced each routed page header's `<h2>` with its one real `<h1>`, gave animated
+  headings stable accessible names, added Home's missing `<main>`, and added a keyboard
+  skip link. Home no longer exposes the name twice to assistive technology.
+- Added per-route document titles, descriptions, runtime canonical/Open Graph URLs,
+  Open Graph/Twitter metadata, `robots.txt`, and a solid-red favicon (the old favicon
+  broke the no-gradients rule). A sitemap and static absolute URLs wait for the domain.
+- Fixed the Projects rail: it now scrolls to each pinned chapter's measured
+  ScrollTrigger start with GSAP ScrollTo, so chapter 05 lands in one click.
+- Fixed Education's 390 px overflow by replacing the mobile year-stamp scale with a
+  bounded lateral pop. FallingText now starts on real pointer movement, not
+  `pointerenter`, so scrolling the title under a stationary cursor does nothing.
+- Removed the retired skill tree, tool sphere, ball pit, InfiniteMenu, morph/parallax,
+  HeroShader, theme code, their CSS, and `gl-matrix`. Production CSS fell from about
+  43.7 kB to 30.9 kB before gzip.
+- Updated Cool Mode selectors for the active Skill Signal Board and CTA.
+
+**Verified:** `npm run build` passes (the expected lazy Spline/three chunk warning
+remains); `npm audit --omit=optional` reports **0 vulnerabilities**; `vercel.json`
+parses; every route has exactly one `<main>` and one correctly named `<h1>`; titles,
+descriptions and canonical URLs update by route; all routes tested fit a 390 px viewport
+with no broken images; the Projects rail reached ci-k8s in one click; stationary scroll
+did not start FallingText while pointer movement did; the tested production-preview
+pages produced no application console errors.
+
+**Still required to ship:** commit and push, then inspect the deployed Home response
+headers/console because the local Vite preview does not apply `vercel.json`. Once the
+domain is purchased, add its absolute canonical/Open Graph fallback and `sitemap.xml`.
+
+---
+
+# Portfolio handoff notes — v21 (Vercel security + local font)
+
+## What changed in v21
+
+- Removed the document-level CSP meta tag. Vite can inject its development stylesheet
+  again, while production still gets a CSP as an HTTP response header.
+- Added root `vercel.json` with site-wide Vercel response headers: CSP,
+  Referrer-Policy, Permissions-Policy, X-Content-Type-Options, X-Frame-Options,
+  Cross-Origin-Opener-Policy and Cross-Origin-Resource-Policy. Removed the ineffective
+  Netlify/Cloudflare `_headers` file from the working tree.
+- Replaced TextPressure's runtime `@font-face` injection and dead Cloudinary Compressa
+  URL with the locally bundled, OFL-licensed Roboto Flex variable font. Only its Latin
+  standard-axis WOFF2 is emitted; the pressure animation now stays within the font's
+  real `wdth` range (25–151).
+- Ran `npm audit fix`: `source-map-js` is now 1.2.2 and `npm audit` reports
+  **0 vulnerabilities**.
+
+**Verified:** `npm run build` passes (2021 modules); `npm ls --depth=0` is healthy;
+`vercel.json` parses; the production bundle contains one local Roboto Flex WOFF2 and
+no legacy remote-font reference or meta CSP. In the in-app browser, `npm run dev`
+renders styled (`body` is cake `#faf6ef`, nav is flex), TextPressure resolves to
+Roboto Flex with live `wght`/`wdth` values, and there are no application or CSP errors.
+
+**Still required to ship:** commit and push the working tree, then check the deployed
+Home page console once so any additional Spline runtime origins can be added to the CSP.
+
+---
+
 # Portfolio handoff notes — v20 (security audit + packaging)
 
 ## What changed in v20

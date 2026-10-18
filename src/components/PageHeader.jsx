@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger);
 // with an optional animated React Bits background behind just this block.
 // On scroll it pins briefly and shrinks/fades while the page content
 // slides over it (skipped for reduced-motion users).
-export default function PageHeader({ tag, title, sub, background }) {
+export default function PageHeader({ tag, title, titleLabel, sub, background }) {
   const ref = useRef(null);
 
   useLayoutEffect(() => {
@@ -35,7 +35,7 @@ export default function PageHeader({ tag, title, sub, background }) {
       {background && <SectionBackground kind={background} />}
       <div className="wrap">
         <div className="sec-tag reveal">{tag}</div>
-        <h2 className="reveal">{title}</h2>
+        <h1 className="reveal" aria-label={titleLabel}>{title}</h1>
         {sub && <p className="sec-sub reveal">{sub}</p>}
       </div>
     </section>

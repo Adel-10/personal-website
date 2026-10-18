@@ -13,7 +13,7 @@ export default function Education() {
   const main = useRef(null);
   useEducationScrolly(main);
   return (
-    <main className="page" ref={main}>
+    <main id="main-content" className="page" ref={main} tabIndex="-1">
       <PageHeader
         tag="Education"
         title={
@@ -22,6 +22,7 @@ export default function Education() {
             highlightWords={['Education', 'first-class']}
           />
         }
+        titleLabel="Education — first-class degree, foundation year, top of class"
         sub="Formal training behind the projects. (Hover the title — physics happens.)"
         background="dot-grid"
       />

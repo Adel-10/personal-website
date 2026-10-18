@@ -2,27 +2,25 @@ import { Link } from 'react-router-dom';
 import useReveal from '../useReveal.js';
 import PageHeader from '../components/PageHeader.jsx';
 import TextType from '../components/text/TextType.jsx';
-import SkillTree from '../components/SkillTree.jsx';
-import ToolSphere from '../components/ToolSphere.jsx';
+import SkillSignalBoard from '../components/SkillSignalBoard.jsx';
 
-// Skills = a video-game skill tree. Click nodes, read proof, explore them all.
 export default function Skills() {
   useReveal();
   return (
-    <main className="page">
+    <main id="main-content" className="page" tabIndex="-1">
       <PageHeader
         tag="Capabilities"
         title={<TextType texts={[
-          'The skill tree',
-          'Click a node. Any node.',
-          'Explore all 24 — something nice happens'
+          'The skill signal board',
+          'Pull on the system',
+          'See what connects'
         ]} />}
-        sub="Six branches, all demonstrated in shipped projects — every node links to its proof."
+        titleLabel="The skill signal board"
+        sub="Six channels connecting field-tested capabilities, concrete tools, and the work behind every claim."
         background="liquid-ether"
       />
-      <SkillTree />
-      <ToolSphere />
-      <section className="stree-cta">
+      <SkillSignalBoard />
+      <section className="skills-cta">
         <div className="wrap">
           <p className="reveal">
             Prefer receipts over trees? <Link to="/projects">The projects page has the eval tables. →</Link>

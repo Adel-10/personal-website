@@ -6,15 +6,15 @@ const REDUCED =
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // React Bits "Text Pressure" (port): a variable font whose weight/width react
-// to cursor proximity per character. Uses the same Compressa VF the original does.
-const FONT_FAMILY = 'CompressaVF';
-const FONT_URL = 'https://res.cloudinary.com/dr6lvwubh/raw/upload/v1529908256/CompressaPRO-GX.woff2';
+// to cursor proximity per character. Roboto Flex is bundled locally from
+// Fontsource so the CSP never needs a third-party font or an inline <style>.
 
 export default function TextPressure({
   text = 'Text',
   accentFrom = -1, // chars from this index get the .tp-accent color
   minFontSize = 36,
-  className = ''
+  className = '',
+  decorative = false
 }) {
   const containerRef = useRef(null);
   const spansRef = useRef([]);
@@ -23,12 +23,6 @@ export default function TextPressure({
   const chars = text.split('');
 
   useEffect(() => {
-    if (!document.getElementById('compressa-vf')) {
-      const style = document.createElement('style');
-      style.id = 'compressa-vf';
-      style.textContent = `@font-face{font-family:'${FONT_FAMILY}';src:url('${FONT_URL}');font-style:normal;}`;
-      document.head.appendChild(style);
-    }
     const container = containerRef.current;
     if (!container) return;
 
@@ -65,7 +59,7 @@ export default function TextPressure({
         const d = Math.hypot(m.x - (sr.x + sr.width / 2), m.y - (sr.y + sr.height / 2));
         const p = Math.max(0, 1 - d / maxDist); // proximity 0..1
         const wght = Math.floor(100 + p * 800);
-        const wdth = Math.floor(25 + p * 175);
+        const wdth = Math.floor(25 + p * 126);
         span.style.fontVariationSettings = `'wght' ${wght}, 'wdth' ${wdth}`;
       });
       raf = requestAnimationFrame(tick);
@@ -80,7 +74,12 @@ export default function TextPressure({
   }, [text, minFontSize]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <div ref={containerRef} className={`text-pressure ${className}`} aria-label={text}>
+    <div
+      ref={containerRef}
+      className={`text-pressure ${className}`}
+      aria-label={decorative ? undefined : text}
+      aria-hidden={decorative || undefined}
+    >
       {chars.map((ch, i) => (
         <span
           key={i}

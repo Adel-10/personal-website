@@ -36,9 +36,11 @@ export default function TextType({
   }, [len, deleting, i, texts, typingSpeed, deletingSpeed, pauseDuration]);
 
   return (
-    <span className={`text-type ${className}`}>
-      {texts[i].slice(0, len)}
-      <span className="tt-cursor" aria-hidden="true">|</span>
+    <span className={`text-type ${className}`} aria-label={texts[0]}>
+      <span aria-hidden="true">
+        {texts[i].slice(0, len)}
+        <span className="tt-cursor">|</span>
+      </span>
     </span>
   );
 }

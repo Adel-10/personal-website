@@ -29,10 +29,9 @@ export default function Hero() {
       <div className="wrap wrap-wide hero-grid">
         <div className="hero-text">
           <div className="kicker reveal">ML/AI Engineer · London</div>
-          <h1 className="reveal hero-name">
-            <span className="sr-only">Adel Mithaiwala</span>
+          <h1 className="reveal hero-name" aria-label="Adel Mithaiwala">
             {/* "Mithaiwala" (from char index 5) wears the red candle */}
-            <TextPressure text="Adel Mithaiwala" accentFrom={5} minFontSize={40} />
+            <TextPressure text="Adel Mithaiwala" accentFrom={5} minFontSize={40} decorative />
           </h1>
           <p className="lede reveal">
             I build ML systems from first principles and evaluate them before I trust them — a GPT written

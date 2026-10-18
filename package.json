@@ -9,10 +9,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@fontsource-variable/roboto-flex": "^5.3.0",
     "@splinetool/react-spline": "^4.1.0",
     "@splinetool/runtime": "^1.10.32",
-    "gl-matrix": "^3.4.4",
     "gsap": "^3.15.0",
+    "lucide-react": "^1.47.0",
     "matter-js": "^0.20.0",
     "ogl": "^1.0.11",
     "postprocessing": "^6.39.2",

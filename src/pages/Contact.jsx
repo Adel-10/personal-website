@@ -5,7 +5,7 @@ import ContactSection from '../sections/Contact.jsx';
 export default function Contact() {
   useReveal();
   return (
-    <main className="page">
+    <main id="main-content" className="page" tabIndex="-1">
       <PageHeader
         tag="Get in touch"
         title="Contact"

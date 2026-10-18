@@ -11,13 +11,14 @@ const SELECTORS = [
   '.rail button',
   '.xp-cta',
   '.contact-links a',
-  '.stree-proof a',
-  '.stree-cta a'
+  '.skillboard-proof a',
+  '.skills-cta a'
 ].join(', ');
 
 const SIZES = [10, 14, 18, 24, 30];
 const LIMIT = 45;
 const GEN_DELAY = 30; // ms between particles while held
+const SVG_NS = 'http://www.w3.org/2000/svg';
 
 export default function CoolModeZone() {
   useEffect(() => {
@@ -39,9 +40,16 @@ export default function CoolModeZone() {
     function generate() {
       const size = SIZES[(Math.random() * SIZES.length) | 0];
       const el = document.createElement('div');
-      el.innerHTML =
-        `<svg width="${size}" height="${size}"><circle cx="${size / 2}" cy="${size / 2}" r="${size / 2}" ` +
-        `fill="${CANDLES[(Math.random() * CANDLES.length) | 0]}"/></svg>`;
+      const svg = document.createElementNS(SVG_NS, 'svg');
+      const circle = document.createElementNS(SVG_NS, 'circle');
+      svg.setAttribute('width', size);
+      svg.setAttribute('height', size);
+      circle.setAttribute('cx', size / 2);
+      circle.setAttribute('cy', size / 2);
+      circle.setAttribute('r', size / 2);
+      circle.setAttribute('fill', CANDLES[(Math.random() * CANDLES.length) | 0]);
+      svg.appendChild(circle);
+      el.appendChild(svg);
       container.appendChild(el);
       particles.push({
         el,
