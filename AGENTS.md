@@ -5,7 +5,7 @@ Single source of truth for any AI agent picking up this project. Read this first
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
-Last reconciled against the working tree on **2026-10-27**.
+Last reconciled against the working tree on **2026-10-28**.
 
 ---
 
@@ -38,16 +38,16 @@ The site has two jobs:
 ```bash
 npm install
 npm run dev       # http://localhost:5173
-npm run build     # → dist/   (passes as of 2026-10-27)
+npm run build     # → dist/   (passes as of 2026-10-28)
 npm run preview   # serve the production build locally
 ```
 
 - Fully static SPA. No backend, no secrets, no environment variables.
 - `vite.config.js` sets `base: './'`. Combined with `HashRouter`, the built site works from
   any path with no server rewrite rules.
-- **Git state:** the last commit is `6ede2ba "Change Home location to Bahrain"`
-  (2026-10-27). The v26 screenshot-feedback changes are currently uncommitted. **What's on
-  Vercel is the commit, not the working tree.** Commit and push to deploy these changes.
+- **Git state:** the last commit is `091186b "Refine page layouts and skill board controls"`
+  (2026-10-27). The v27 route-splitting change is currently uncommitted. **What's on Vercel
+  is the commit, not the working tree.** Commit and push to deploy this change.
 - Build warning about chunks over 500 kB is expected. The large chunks (Spline runtime and
   physics, three.js) are lazy-loaded on the pages that use them.
 
@@ -120,7 +120,7 @@ is gone.
 ```
 vercel.json                Production security headers, including CSP
 src/
-  main.jsx, App.jsx        HashRouter shell: ScrollToTop, .ambient blobs, CoolModeZone, Nav, Routes
+  main.jsx, App.jsx        HashRouter shell: ScrollToTop, ambient, Nav, eager Home + lazy routes
   index.css                ~930 lines: palette vars + all layout/component styles
   pages/                   Home, Projects, Skills, Education, Experience, Contact
   sections/                Hero, Nav, Contact (links + warp), projects/*Project.jsx (5 cards)
@@ -153,6 +153,9 @@ legacy/                    Old single-file v2 site, kept for reference
 
 **Key mechanics**
 
+- **Route splitting:** Home stays in the initial bundle. Projects, Skills, Education,
+  Experience, and Contact are `React.lazy()` imports behind one accessible `Suspense`
+  fallback, so their page code and page-only dependencies load on navigation.
 - **SectionBackground:** each background is its own lazy chunk. It mounts only while within
   ±25% of the viewport, so at most about two WebGL contexts are alive at once. It skips
   WebGL under reduced motion or when WebGL is missing. DotGrid is 2D canvas and always allowed.

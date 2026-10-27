@@ -2,6 +2,17 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v27 (route-level code splitting)
+
+- Kept Home in the initial application bundle and converted Projects, Skills, Education,
+  Experience, and Contact to `React.lazy()` route imports.
+- Added one accessible `Suspense` loading state for navigation while a page chunk is fetched.
+- No page content, styling, animation, or background behavior changed.
+
+**Verified:** the production build passes and emits separate chunks for all five lazy routes.
+
+---
+
 # Portfolio handoff notes — v26 (deployed-site feedback pass)
 
 - Added clear space between the fixed navigation and Contact's Warp card; shortened its
