@@ -34,16 +34,13 @@ export default function Hero() {
             <TextPressure text="Adel Mithaiwala" accentFrom={5} minFontSize={40} decorative />
           </h1>
           <p className="lede reveal">
-            I build ML systems from first principles and evaluate them before I trust them — a GPT written
-            in raw PyTorch, a bilingual English/Arabic RAG system with a measured abstention guarantee, an
-            agent loop with no framework, a dialect fine-tune validated checkpoint by checkpoint.
+            Aspiring AI/ML engineer, passionate about reliable machine learning for real-world decisions.
           </p>
           <p className="lede reveal">
             First-class BSc (Hons) <strong>Computer Science with Management</strong>, King's College London
-            (with distinction). Previously an intern on <strong>KPMG's AI team</strong>. Starting an AI/ML
-            master's soon.
+            (with distinction). Previously an intern on <strong>KPMG's AI team</strong> and at{' '}
+            <strong>Batelco</strong>.
           </p>
-          <div className="status reveal"><span className="dot" />Open to a one-year ML/AI engineering role before my master's</div>
           <div className="quick-links reveal">
             <Link to="/projects">projects →</Link>
             <Link to="/skills">skills →</Link>

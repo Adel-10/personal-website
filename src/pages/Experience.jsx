@@ -1,5 +1,4 @@
 import { useRef } from 'react';
-import { Link } from 'react-router-dom';
 import useReveal from '../useReveal.js';
 import useExperienceScrolly from '../useExperienceScrolly.js';
 import PageHeader from '../components/PageHeader.jsx';
@@ -105,16 +104,6 @@ export default function Experience() {
               <div className="xp-chips">
                 <span>HCI</span><span>Research</span><span>Presenting</span>
               </div>
-            </article>
-
-            <article className="project xp-panel xp-next" style={{ '--xc': 'var(--c-red)' }}>
-              <div className="xp-co">Your team?</div>
-              <div className="xp-meta">One-year ML/AI engineering role · before the master's</div>
-              <p className="xp-li">
-                The projects page shows what I build and how I measure it; this page shows how I work
-                with people. The next panel could be yours.
-              </p>
-              <Link className="xp-cta" to="/contact">get in touch →</Link>
             </article>
 
           </div>

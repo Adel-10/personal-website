@@ -2,6 +2,33 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v24 (owner copy revision)
+
+## What changed in v24
+
+- Applied Adel's edited website transcript across Home, Projects, Education, Experience,
+  and Contact. This includes the shorter project chapter copy, expanded project explanations,
+  and the corrected fine-tune baseline/evaluation figures supplied in the transcript.
+- Removed the Home availability pill, Projects' “Work” eyebrow, Experience's closing
+  “Your team?” panel, and Contact's decorative page-header banner. Contact retains one
+  visually hidden `<h1>` for accessibility.
+- Removed the now-unused Contact Particles background and its sole `ogl` dependency.
+- Updated Vite from 8.1.4 to 8.3.5 after new development-server advisories, restoring
+  `npm audit` to zero vulnerabilities.
+- Kept the owner's Home introduction wording exactly as supplied; its editorial assessment
+  is documented in the accompanying task response rather than silently rewriting it.
+
+**Verified:** `npm run build` passes; `npm audit --omit=optional` reports **0 vulnerabilities**;
+the affected routes were checked in the browser at desktop width and 390 px with no horizontal
+overflow; removed sections are absent; Contact's remaining Warp card reveals correctly; and
+the browser console produced no application errors. The expected large lazy-chunk warning and
+the existing duplicate-three.js development warning remain.
+
+**Still required to ship:** commit and push, then perform the existing post-deploy Vercel
+header/Home-console check.
+
+---
+
 # Portfolio handoff notes — v23 (external copy deck)
 
 ## What changed in v23

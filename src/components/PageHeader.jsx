@@ -34,7 +34,7 @@ export default function PageHeader({ tag, title, titleLabel, sub, background }) 
     <section className={cls} ref={ref}>
       {background && <SectionBackground kind={background} />}
       <div className="wrap">
-        <div className="sec-tag reveal">{tag}</div>
+        {tag && <div className="sec-tag reveal">{tag}</div>}
         <h1 className="reveal" aria-label={titleLabel}>{title}</h1>
         {sub && <p className="sec-sub reveal">{sub}</p>}
       </div>

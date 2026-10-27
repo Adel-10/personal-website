@@ -158,23 +158,6 @@ h1 {
 h1 .grad { color: var(--c-red); }
 .lede { color: var(--text-dim); max-width: 660px; font-size: 18.5px; margin-bottom: 14px; }
 .lede strong { color: var(--text); font-weight: 600; }
-.status {
-  display: inline-flex; align-items: center; gap: 9px;
-  margin-top: 22px; padding: 9px 18px;
-  border-radius: 999px; font-size: 14px; color: var(--text);
-  background: var(--card-strong);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border: 1px solid var(--glass-border);
-  box-shadow: inset 0 1px 0 var(--glass-highlight);
-}
-.status .dot {
-  width: 8px; height: 8px; border-radius: 50%;
-  background: var(--accent);
-  box-shadow: 0 0 10px var(--accent);
-  animation: pulse 2.4s ease-in-out infinite;
-}
-@keyframes pulse { 50% { opacity: .45; } }
 .quick-links { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 30px; }
 .quick-links a {
   font-family: var(--mono); font-size: 13.5px; color: var(--text-dim);
@@ -813,16 +796,6 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   border: 1px solid color-mix(in srgb, var(--xc, var(--accent)) 45%, transparent);
   color: var(--xc, var(--accent));
 }
-.xp-next { text-align: left; }
-.xp-cta {
-  display: inline-block; margin-top: 14px;
-  font-family: var(--mono); font-size: 15px;
-  color: var(--xc, var(--accent)); text-decoration: none;
-  border: 1px solid var(--xc, var(--accent));
-  border-radius: 999px; padding: 10px 22px;
-  transition: background .2s;
-}
-.xp-cta:hover { background: color-mix(in srgb, var(--xc, var(--accent)) 12%, transparent); }
 .xp-hint {
   position: absolute; right: 28px; bottom: 24px;
   font-family: var(--mono); font-size: 13px; color: var(--text-dim);
@@ -952,7 +925,6 @@ footer { padding: 48px 0 56px; color: var(--text-dim); font-size: 13.5px; border
 @media (prefers-reduced-motion: reduce) {
   .reveal { opacity: 1; transform: none; transition: none; }
   html { scroll-behavior: auto; }
-  .status .dot { animation: none; }
   .project, .skill, .contact-links a { transition: none; }
 }
 

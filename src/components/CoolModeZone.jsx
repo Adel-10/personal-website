@@ -9,7 +9,6 @@ const SELECTORS = [
   '.quick-links a',
   '.project .links a',
   '.rail button',
-  '.xp-cta',
   '.contact-links a',
   '.skillboard-proof a',
   '.skills-cta a'

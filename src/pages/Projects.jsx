@@ -20,7 +20,7 @@ const RAIL = [
   ['project-finetune', 'chapter-finetune', 'Dialect fine-tune'],
   ['project-gpt', 'chapter-gpt', 'shakespeare-gpt'],
   ['project-agent', 'chapter-agent', 'minimal-agent'],
-  ['project-cik8s', 'chapter-cik8s', 'ci-k8s']
+  ['project-cik8s', 'chapter-cik8s', 'CI/CD pipeline to Kubernetes']
 ];
 
 const REDUCED =
@@ -54,10 +54,9 @@ export default function Projects() {
   return (
     <main id="main-content" className="page" ref={main} tabIndex="-1">
       <PageHeader
-        tag="Work"
         title={<DecryptedText text="Featured projects" speed={40} />}
         titleLabel="Featured projects"
-        sub="Five projects, built end to end. Every number below is a real, measured artifact — training curves, eval tables, screenshots."
+        sub="Five projects, built end to end."
         background="grid-scan"
       />
 
@@ -80,7 +79,7 @@ export default function Projects() {
         id="chapter-rag"
         num="01" hue="#ff4d4d"
         title="Bilingual RAG"
-        kicker="Ask in English. It answers from Arabic law — with citations, or not at all."
+        kicker="Ask in English. It answers from Arabic law with citations."
       />
       <RagProject />
 
@@ -88,7 +87,7 @@ export default function Projects() {
         id="chapter-finetune"
         num="02" hue="#ff9f1c"
         title="Dialect fine-tune"
-        kicker="Teaching a 118M-parameter embedder to read Bahraini texting-register Arabic."
+        kicker="Teaching a 118M-parameter embedder to read Bahraini Arabic in texting."
       />
       <FinetuneProject />
 
@@ -96,7 +95,7 @@ export default function Projects() {
         id="chapter-gpt"
         num="03" hue="#3b82f6"
         title="shakespeare-gpt"
-        kicker="A transformer written from first principles — attention and all."
+        kicker="A transformer written from first principles."
       />
       <GptProject />
 
@@ -104,15 +103,15 @@ export default function Projects() {
         id="chapter-agent"
         num="04" hue="#2ec27e"
         title="minimal-agent"
-        kicker="What an agent actually is: a loop, some tools, and one message history."
+        kicker="A loop, some tools, and one message history."
       />
       <AgentProject />
 
       <ChapterIntro
         id="chapter-cik8s"
         num="05" hue="#8b5cf6"
-        title="ci-k8s"
-        kicker="Because models that never ship don't matter."
+        title="CI/CD pipeline to Kubernetes"
+        kicker="Models that never ship don't matter."
       />
       <CiK8sProject />
     </main>

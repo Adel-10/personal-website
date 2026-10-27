@@ -1,11 +1,11 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v22). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v24). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
-Last reconciled against the working tree on **2026-10-18**.
+Last reconciled against the working tree on **2026-10-24**.
 
 ---
 
@@ -38,17 +38,17 @@ The site has two jobs:
 ```bash
 npm install
 npm run dev       # http://localhost:5173
-npm run build     # → dist/   (passes as of 2026-10-18)
+npm run build     # → dist/   (passes as of 2026-10-24)
 npm run preview   # serve the production build locally
 ```
 
 - Fully static SPA. No backend, no secrets, no environment variables.
 - `vite.config.js` sets `base: './'`. Combined with `HashRouter`, the built site works from
   any path with no server rewrite rules.
-- **Git state:** the last commit is `ca6bc39 "Personal website v1"` (2026-07-24). The
-  **working tree has substantial uncommitted changes**: the Skills-page rewrite, security
-  work, accessibility/mobile fixes, and cleanup. **What's on Vercel is the commit, not the
-  working tree.** Commit and push to deploy.
+- **Git state:** the last commit is `a03ccac "Prepare portfolio for production"`
+  (2026-10-18). The owner-directed copy revision, removed sections, Vite security update,
+  and retired Contact-particles cleanup are currently uncommitted. **What's on Vercel is
+  the commit, not the working tree.** Commit and push to deploy these changes.
 - Build warning about chunks over 500 kB is expected. The large chunks (Spline runtime and
   physics, three.js) are lazy-loaded on the pages that use them.
 
@@ -106,7 +106,6 @@ These are explicit decisions Adel made during development.
 | vite 8, @vitejs/plugin-react 6 | Dev and build |
 | gsap 3.15 (incl. ScrollTrigger, SplitText, free since 3.13) | All scrollytelling, pins, scrubs, counters |
 | three 0.180, postprocessing | Lanyard, Liquid Ether, Hyperspeed, Grid Scan |
-| ogl | Particles background |
 | matter-js | FallingText title, Skill Signal Board |
 | @splinetool/react-spline + runtime | 3D robot on Home |
 | lucide-react | Icons in the Skill Signal Board |
@@ -128,9 +127,9 @@ src/
   sections/                Hero, Nav, Contact (links + warp), projects/*Project.jsx (5 cards)
   components/
     PageHeader.jsx         Shared title block: optional animated bg, gsap pin + shrink/fade on scroll
-    SectionBackground.jsx  Lazy, visibility-gated React Bits backgrounds + palette tables (P, HYPERSPEED_COLORS)
+    SectionBackground.jsx  Lazy, visibility-gated React Bits backgrounds + Hyperspeed palette table
     RouteMetadata.jsx      Per-route title, description, canonical and social metadata
-    backgrounds/           Vendored React Bits: LiquidEther, Particles, GridScan, DotGrid, Hyperspeed
+    backgrounds/           Vendored React Bits: LiquidEther, GridScan, DotGrid, Hyperspeed
     text/                  React Bits text effect ports: TextPressure, DecryptedText, TextType, FallingText, CurvedLoop
     lanyard/               Custom three.js lanyard (Lanyard.jsx, kclTextures.js)
     ChapterIntro.jsx       Projects-page pinned chapter scenes
@@ -167,8 +166,8 @@ legacy/                    Old single-file v2 site, kept for reference
 - **gsap hygiene:** every hook uses `gsap.matchMedia()` and `mm.revert()` on unmount, so
   triggers die on route change. Lazy images call `ScrollTrigger.refresh()` on load.
 - **CoolModeZone:** a single document-level pointer listener. Coverage is the `SELECTORS`
-  list at the top of the file (hero quick-links, project link pills, rail buttons, xp CTA,
-  contact links, skill-board proof links). Particles are SVG circles in candle colors, built
+  list at the top of the file (hero quick-links, project link pills, rail buttons, contact
+  links, and skill-board proof links). Particles are SVG circles in candle colors, built
   with `createElementNS` rather than innerHTML.
 
 ---
@@ -179,9 +178,8 @@ legacy/                    Old single-file v2 site, kept for reference
 
 - Two-column `wrap-wide` grid.
 - **Left:** kicker "ML/AI Engineer · London", name as **TextPressure** (self-hosted Roboto Flex
-  variable font; "Mithaiwala" in candle red), two lede paragraphs, an "Open to a one-year
-  ML/AI engineering role" status pill, and five quick-links (each lights a different candle
-  on hover).
+  variable font; "Mithaiwala" in candle red), two lede paragraphs, and five quick-links
+  (each lights a different candle on hover).
 - **Right:** the **Spline robot** (`prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode`),
   which tracks the mouse. A soft orange glow follows the cursor only inside the robot's box.
 - The robot is skipped under reduced motion, and the error boundary hides it if it fails to load.
@@ -198,7 +196,7 @@ legacy/                    Old single-file v2 site, kept for reference
   | 02 | Dialect fine-tune | orange |
   | 03 | shakespeare-gpt | blue |
   | 04 | minimal-agent | green |
-  | 05 | ci-k8s | purple |
+  | 05 | CI/CD pipeline to Kubernetes | purple |
 
 - **Cards:** scrubbed rise-in, parallax on figures, tables and code, plus a
   **3-up bigstats strip** whose counters count up from 0 (values are in `data-count`).
@@ -208,14 +206,12 @@ legacy/                    Old single-file v2 site, kept for reference
 - **Key facts (do not alter without a source):**
   - **RAG:** hit@6 33/33, faithfulness 32/33, abstention 6/6, 0 false abstentions, EN↔AR
     cosine 0.781 vs 0.548, 1,133 chunks.
-  - **Fine-tune:** dialect hit@6 59→63/68, MRR 0.707→0.766, texting MRR 0.33→0.62.
+  - **Fine-tune:** dialect hit@6 57→63/68, MRR 0.687→0.766, texting MRR 0.33→0.62.
   - **GPT:** 11M params, val perplexity 4.4 (loss 1.47), −65% vs uniform.
   - **Agent:** about 230 lines, 3 stages.
   - **ci-k8s:** Jenkins → Docker → K8s, 2 replicas, readiness and liveness probes.
 
 ### Skills (`pages/Skills.jsx` → `components/SkillSignalBoard.jsx`)
-
-**Note:** this page was rebuilt by another agent after the last commit and is uncommitted.
 
 - **Header:** Liquid Ether (warm candles only) with a **TextType** typewriter cycling "The
   skill signal board" / "Pull on the system" / "See what connects".
@@ -265,14 +261,13 @@ legacy/                    Old single-file v2 site, kept for reference
     - **Student rep** (green): Informatics, Sep 2023–May 2025, elected twice, 200+ students.
     - **PhD mentee** (orange): Informatics PhD mentorship, Jan–Mar 2024, HCI, final
       presentation.
-    - **"Your team?"** CTA panel (red) → /contact.
 - Under 861px or with reduced motion, the rides collapse to vertical stacks.
 
 ### Contact (`pages/Contact.jsx`, `sections/Contact.jsx`)
 
-- **Header:** Particles in all six candles.
-- **Body:** a single Magic UI **Warp Background** card. Candle beams stream through a
-  perspective grid around three links (email, GitHub, LinkedIn). All of them have Cool Mode.
+- A single Magic UI **Warp Background** card. Candle beams stream through a perspective grid
+  around three links (email, GitHub, LinkedIn). All of them have Cool Mode. The page keeps a
+  visually hidden `h1` after the decorative banner's removal.
 
 ---
 
@@ -280,7 +275,7 @@ legacy/                    Old single-file v2 site, kept for reference
 
 | Component | Source | Local changes |
 |---|---|---|
-| LiquidEther, Particles, DotGrid, Hyperspeed | React Bits registry | Themed via SectionBackground only |
+| LiquidEther, DotGrid, Hyperspeed | React Bits registry | Themed via SectionBackground only |
 | GridScan | React Bits | **LOCAL PATCHES:** alpha fades with distance (upstream painted lines black on light backgrounds); webcam/face-api code removed entirely |
 | TextPressure, DecryptedText, TextType, FallingText, CurvedLoop | React Bits | Hand-ported; TextPressure uses locally bundled Roboto Flex; FallingText uses matter-js, builds DOM nodes rather than innerHTML, and requires pointer movement before starting |
 | SplineScene | 21st.dev (serafim/splite) | Tailwind → CSS; error boundary added |
@@ -314,8 +309,9 @@ tables in `SectionBackground.jsx` and must be kept in sync by hand.
 
 ## 9. Security posture
 
-- `npm audit`: **0 vulnerabilities** as of 2026-10-18. The face-api.js chain was eliminated
-  in v20; the later `source-map-js` advisory was cleared by upgrading it to 1.2.2.
+- `npm audit`: **0 vulnerabilities** as of 2026-10-24. The face-api.js chain was eliminated
+  in v20; `source-map-js` was upgraded in v21; Vite was updated to 8.3.5 in v24 after new
+  development-server advisories affected 8.0.0–8.1.5.
 - No secrets in source. All `target="_blank"` links have `rel="noopener noreferrer"`. No
   `eval`. innerHTML has been removed from CoolModeZone and FallingText.
 - **CSP and response headers** live in root `vercel.json`, which Vercel applies to all paths.
@@ -329,19 +325,17 @@ tables in `SectionBackground.jsx` and must be kept in sync by hand.
 
 ## 10. Remaining release items and owner decisions
 
-1. **The working tree is uncommitted.** Commit and push to ship all work since v1.
+1. **The working tree is uncommitted.** Commit and push to ship the v24 copy revision.
 2. **Run one post-deploy check on Vercel.** The local production preview is clean and the
    known Spline WASM origin is allowed, but only Vercel applies `vercel.json`; check the live
    Home console and response headers after pushing.
 3. **Domain-dependent SEO:** route titles, descriptions, canonical URLs, Open Graph/Twitter
    metadata, `robots.txt`, and the favicon exist. After the final domain is attached, add an
    absolute production `og:url`/canonical fallback and `sitemap.xml` using that domain.
-4. **Copy for Adel to confirm:** "London" in the hero kicker, and "Starting an AI/ML master's
-   soon".
-5. **Duplication:** the Education BSc entry mentions the student rep role and the 75 mentees,
+4. **Duplication:** the Education BSc entry mentions the student rep role and the 75 mentees,
    which now also have full Leadership panels on Experience. Adel was offered a trim and
    hasn't decided.
-6. **Owner visual review:** all routes were checked at desktop and 390 px, but Adel still
+5. **Owner visual review:** all routes were checked at desktop and 390 px, but Adel still
    needs to approve the new Skill Signal Board's visual direction.
 
 Resolved in v22: one-click Projects rail, mobile Education overflow, stationary-cursor

@@ -4,7 +4,7 @@ export default function AgentProject() {
   return (
     <ProjectSection id="project-agent">
       <h3>minimal-agent — an LLM agent loop with no framework</h3>
-      <div className="tagline">Plan → execute (with tools) → reflect, in ~230 lines of pure Python</div>
+      <div className="tagline">Plan → execute (with tools) → reflect</div>
       <div className="links">
         <a href="https://github.com/Adel-10/minimal-agent" target="_blank" rel="noopener noreferrer">github.com/Adel-10/minimal-agent →</a>
       </div>
@@ -25,21 +25,19 @@ export default function AgentProject() {
       </div>
 
       <p>
-        A working agent built to understand what an "agent" actually is: sequenced LLM calls with different
-        system prompts sharing one piece of state (the message history). No LangChain — just the{' '}
-        <code>anthropic</code> SDK. It's structured as three runnable stages, each adding one concept, so
-        you can <code>diff</code> consecutive files to see exactly what "tools + a loop" and "reflection"
-        cost in code.
+        A working agent built to visualize sequenced LLM calls with different system prompts sharing one
+        piece of state: the message history. Built without LangChain, using only the <code>anthropic</code>{' '}
+        SDK. It's structured as three runnable stages, each adding one concept, so you can see exactly what
+        "tools + a loop" and "reflection" look like.
       </p>
 
       <p>
-        Design decisions worth calling out: tools return errors as data, not exceptions — an error string
-        goes back into the message history where the model reads it and retries, which is the difference
-        between a brittle loop and a self-healing one. Reflection is a separate call with a clean transcript
-        and the real tool-call log, because a model reviewing its own in-context answer rubber-stamps it —
-        and the tool log lets the reviewer catch the model quietly doing mental math instead of calling the
-        calculator. The calculator itself parses an AST and whitelists arithmetic nodes rather than calling{' '}
-        <code>eval()</code> on model output.
+        Tools return errors as data, not exceptions, so an error string goes back into the message history
+        where the model reads it and retries, which creates a self-healing loop. Reflection is a separate call
+        with a clean transcript and the real tool-call log, since a model reviewing its own in-context answer
+        approves it out of routine. The tool log lets the reviewer catch the model quietly doing math instead
+        of calling the calculator. The calculator itself parses an AST and whitelists arithmetic nodes rather
+        than calling <code>eval()</code> on model output.
       </p>
 
       <h4>Stack</h4>

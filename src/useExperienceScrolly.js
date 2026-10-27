@@ -33,7 +33,7 @@ export default function useExperienceScrolly(ref) {
         });
 
         pinEl.querySelectorAll('.xp-panel').forEach(panel => {
-          const bits = panel.querySelectorAll('.xp-li, .xp-big, .xp-chips, .xp-cta');
+          const bits = panel.querySelectorAll('.xp-li, .xp-big, .xp-chips');
           if (!bits.length) return;
           gsap.from(bits, {
             y: 44, opacity: 0, stagger: 0.08, duration: 0.5, ease: 'power2.out',

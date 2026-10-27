@@ -4,7 +4,7 @@ export default function GptProject() {
   return (
     <ProjectSection id="project-gpt">
       <h3>shakespeare-gpt — a GPT from scratch in raw PyTorch</h3>
-      <div className="tagline">No HuggingFace, no transformer libraries: every component implemented from first principles</div>
+      <div className="tagline">No HuggingFace or transformer libraries, every component was implemented from scratch</div>
       <div className="links">
         <a href="https://github.com/Adel-10/shakespeare-gpt" target="_blank" rel="noopener noreferrer">github.com/Adel-10/shakespeare-gpt →</a>
       </div>
@@ -25,10 +25,10 @@ export default function GptProject() {
       </div>
 
       <p>
-        A character-level GPT built and trained from scratch: tokenizer, token/position embeddings,
-        multi-head causal self-attention, pre-norm residual transformer blocks, the training loop, and the
-        sampler are all hand-written PyTorch. Training uses AdamW with LR warmup + cosine decay, weight
-        tying, dropout, gradient clipping, and early stopping on validation loss; sampling supports
+        A character-level GPT built and trained from scratch. The tokenizer, token/position embeddings,
+        multi-head causal self-attention, pre-norm residual transformer blocks, training loop, and sampler
+        are all hand-written in PyTorch. Training uses AdamW with LR warmup + cosine decay, weight tying,
+        dropout, gradient clipping, and early stopping on validation loss. Sampling supports
         temperature, top-k, top-p and greedy decoding.
       </p>
 
@@ -43,11 +43,11 @@ export default function GptProject() {
         </table>
       </div>
       <p>
-        The instructive result is the comparison: on the 98K-character slice the small model overfits —
-        validation loss bottoms at 1.59 and climbs to 2.21 as it memorizes. Trained on the full
-        1.1M-character corpus, the 11M-parameter model reaches <strong>validation perplexity 4.36 (loss
-        1.47)</strong> with only a mild train/val gap (~0.30), held in check by dropout and early stopping.
-        Scaling the data ~11× is what turns memorization into generalization.
+        On the 98K-character slice, the small model overfits: validation loss is lowest at 1.59 and climbs to
+        2.21 as it memorizes. Trained on the full 1.1M-character corpus, the 11M-parameter model reaches
+        validation perplexity 4.36 (loss 1.47) with only a mild train/validation gap (~0.30), held in check by
+        dropout and early stopping. Scaling the data ~11× turns memorization and overfitting into
+        generalization.
       </p>
 
       <div className="figrow">

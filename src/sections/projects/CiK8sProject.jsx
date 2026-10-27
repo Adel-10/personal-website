@@ -27,8 +27,8 @@ export default function CiK8sProject() {
       <p>
         A Node.js service taken through a full delivery pipeline: Jenkins builds and tags a Docker image by
         git SHA, pushes it to a registry, and rolls it out to a Kubernetes Deployment (2 replicas,
-        readiness/liveness probes) behind a Service. Not an ML project — it's here because models that never
-        ship don't matter, and this is the shipping half demonstrated end to end.
+        readiness/liveness probes) behind a Service. Implemented to understand shipping models and
+        demonstrated end to end.
       </p>
 
       <h4>Stack</h4>

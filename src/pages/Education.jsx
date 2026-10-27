@@ -23,7 +23,7 @@ export default function Education() {
           />
         }
         titleLabel="Education — first-class degree, foundation year, top of class"
-        sub="Formal training behind the projects. (Hover the title — physics happens.)"
+        sub="Formal training behind the projects."
         background="dot-grid"
       />
       <section id="education" className="edu">

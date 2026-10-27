@@ -4,7 +4,6 @@ import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
 // while its section is near the viewport (±25% margin) — so at most ~2 WebGL
 // contexts are alive at any moment while scrolling.
 const LiquidEther = lazy(() => import('./backgrounds/LiquidEther/LiquidEther.jsx'));
-const Particles = lazy(() => import('./backgrounds/Particles/Particles.jsx'));
 const GridScan = lazy(() => import('./backgrounds/GridScan/GridScan.jsx').then(m => ({ default: m.GridScan })));
 const DotGrid = lazy(() => import('./backgrounds/DotGrid/DotGrid.jsx'));
 const Hyperspeed = lazy(() => import('./backgrounds/Hyperspeed/Hyperspeed.jsx'));
@@ -26,13 +25,6 @@ function hasWebGL() {
   return webglOK;
 }
 
-// "Birthday" palette (matches the CSS variables in index.css) — single theme
-const P = {
-  accent: '#ff4d4d', accent2: '#3b82f6', third: '#8b5cf6',
-  dot: '#ddd4e6', text: '#241f2e',
-  candles: ['#ff4d4d', '#ff9f1c', '#ffd23f', '#2ec27e', '#3b82f6', '#8b5cf6']
-};
-
 const HYPERSPEED_COLORS = {
   roadColor: 0xefe8db,
   islandColor: 0xf2ecdf,
@@ -45,7 +37,6 @@ const HYPERSPEED_COLORS = {
 };
 
 function backgroundFor(kind) {
-  const c = P;
   switch (kind) {
     case 'liquid-ether':
       // warm candles only — blue/purple dyes go muddy-dark on the cream base
@@ -88,18 +79,6 @@ function backgroundFor(kind) {
           proximity={140}
           shockRadius={220}
           shockStrength={4}
-        />
-      );
-    case 'particles':
-      return (
-        <Particles
-          particleColors={c.candles}
-          particleCount={260}
-          particleSpread={11}
-          speed={0.08}
-          particleBaseSize={90}
-          alphaParticles
-          disableRotation={false}
         />
       );
     case 'hyperspeed':
