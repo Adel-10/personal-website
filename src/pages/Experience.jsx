@@ -17,7 +17,7 @@ export default function Experience() {
           <CurvedLoop marqueeText="Experience ✦ KPMG ✦ Batelco ✦ King's ✦" curveAmount={110} />
         }
         titleLabel="Experience"
-        sub="Two rides ahead — professional, then leadership. (Drag the ribbon. Then keep scrolling: this page drives sideways.)"
+        sub="Professional and Leadership Experience"
         background="hyperspeed"
       />
 

@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v24). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v26). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -38,17 +38,16 @@ The site has two jobs:
 ```bash
 npm install
 npm run dev       # http://localhost:5173
-npm run build     # → dist/   (passes as of 2026-10-24)
+npm run build     # → dist/   (passes as of 2026-10-27)
 npm run preview   # serve the production build locally
 ```
 
 - Fully static SPA. No backend, no secrets, no environment variables.
 - `vite.config.js` sets `base: './'`. Combined with `HashRouter`, the built site works from
   any path with no server rewrite rules.
-- **Git state:** the last commit is `3834bce "Update portfolio wording and remove retired
-  sections"` (2026-10-27). The Home kicker's London → Bahrain correction is currently
-  uncommitted. **What's on Vercel is the commit, not the working tree.** Commit and push to
-  deploy this correction.
+- **Git state:** the last commit is `6ede2ba "Change Home location to Bahrain"`
+  (2026-10-27). The v26 screenshot-feedback changes are currently uncommitted. **What's on
+  Vercel is the commit, not the working tree.** Commit and push to deploy these changes.
 - Build warning about chunks over 500 kB is expected. The large chunks (Spline runtime and
   physics, three.js) are lazy-loaded on the pages that use them.
 
@@ -121,8 +120,8 @@ is gone.
 ```
 vercel.json                Production security headers, including CSP
 src/
-  main.jsx, App.jsx        HashRouter shell: ScrollToTop, .ambient blobs, CoolModeZone, Nav, Routes, footer
-  index.css                ~970 lines: palette vars + all layout/component styles
+  main.jsx, App.jsx        HashRouter shell: ScrollToTop, .ambient blobs, CoolModeZone, Nav, Routes
+  index.css                ~930 lines: palette vars + all layout/component styles
   pages/                   Home, Projects, Skills, Education, Experience, Contact
   sections/                Hero, Nav, Contact (links + warp), projects/*Project.jsx (5 cards)
   components/
@@ -188,7 +187,8 @@ legacy/                    Old single-file v2 site, kept for reference
 
 - **Header:** Grid Scan "graph paper" with the title as **DecryptedText**.
 - **Five chapters.** Each has a full-viewport `ChapterIntro`: a giant outlined number, a title
-  assembled by SplitText characters, and a kicker. It pins, then shrinks away into its card.
+  assembled by SplitText characters inside whole-word wrappers, and a kicker. It pins, then
+  shrinks away into its card. Whole words never break across lines.
 
   | # | Chapter | Candle |
   |---|---|---|
@@ -219,7 +219,7 @@ legacy/                    Old single-file v2 site, kept for reference
   - Six channel tabs (DL, RET, LLM, EVAL, ENG, OPS), each in its own candle.
   - A "live patch" field where three capability modules hang on matter-js spring
     constraints (zero gravity), wired by SVG cables to anchor ports. Modules are draggable
-    and clickable. **Jolt** and **Reset** buttons sit on the console.
+    and clickable. A **Reset** button restores the console layout.
   - An inspector panel with a signal-wave animation and a "proven in" link to /projects.
   - A tool grid. Clicking a tool nudges the related module.
   - Reduced motion places the modules statically.
@@ -230,7 +230,7 @@ legacy/                    Old single-file v2 site, kept for reference
 - **Header:** green Dot Grid with the title as **FallingText**. On *hover* the words drop
   with physics and can be dragged. **↺ restart** restores the layout and re-arms on the next
   hover. The drop requires a real pointer-move event, so scrolling a stationary cursor over
-  the pinned title does not trigger it.
+  the pinned title does not trigger it. Its hover/physics region is 88px tall.
 - **Body:** a timeline whose line draws itself on scroll. Year stamps pop in. **The KCL
   lanyard rides sticky on the right.**
 - **Three milestones:**
@@ -267,7 +267,8 @@ legacy/                    Old single-file v2 site, kept for reference
 
 - A single Magic UI **Warp Background** card. Candle beams stream through a perspective grid
   around three links (email, GitHub, LinkedIn). All of them have Cool Mode. The page keeps a
-  visually hidden `h1` after the decorative banner's removal.
+  visually hidden `h1` after the decorative banner's removal, and the card begins below the
+  fixed navigation with a deliberate gap.
 
 ---
 
@@ -325,7 +326,7 @@ tables in `SectionBackground.jsx` and must be kept in sync by hand.
 
 ## 10. Remaining release items and owner decisions
 
-1. **The working tree is uncommitted.** Commit and push to ship the v25 location correction.
+1. **The working tree is uncommitted.** Commit and push to ship the v26 screenshot-feedback changes.
 2. **Run one post-deploy check on Vercel.** The local production preview is clean and the
    known Spline WASM origin is allowed, but only Vercel applies `vercel.json`; check the live
    Home console and response headers after pushing.

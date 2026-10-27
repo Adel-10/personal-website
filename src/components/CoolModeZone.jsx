@@ -10,8 +10,7 @@ const SELECTORS = [
   '.project .links a',
   '.rail button',
   '.contact-links a',
-  '.skillboard-proof a',
-  '.skills-cta a'
+  '.skillboard-proof a'
 ].join(', ');
 
 const SIZES = [10, 14, 18, 24, 30];

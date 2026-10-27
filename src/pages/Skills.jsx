@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom';
 import useReveal from '../useReveal.js';
 import PageHeader from '../components/PageHeader.jsx';
 import TextType from '../components/text/TextType.jsx';
@@ -20,13 +19,6 @@ export default function Skills() {
         background="liquid-ether"
       />
       <SkillSignalBoard />
-      <section className="skills-cta">
-        <div className="wrap">
-          <p className="reveal">
-            Prefer receipts over trees? <Link to="/projects">The projects page has the eval tables. →</Link>
-          </p>
-        </div>
-      </section>
     </main>
   );
 }

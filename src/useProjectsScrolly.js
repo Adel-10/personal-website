@@ -31,7 +31,8 @@ export default function useProjectsScrolly(ref) {
         const num = ch.querySelector('.ch-num');
         const title = ch.querySelector('.ch-title');
         const kicker = ch.querySelector('.ch-kicker');
-        const split = new SplitText(title, { type: 'chars' });
+        // Keep each word as one wrapping unit while retaining per-character animation.
+        const split = new SplitText(title, { type: 'words,chars', wordsClass: 'ch-word' });
         splits.push(split);
         const tl = gsap.timeline({
           scrollTrigger: { trigger: ch, start: 'top top', end: '+=110%', pin: true, scrub: true }

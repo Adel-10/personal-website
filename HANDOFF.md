@@ -2,6 +2,24 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v26 (deployed-site feedback pass)
+
+- Added clear space between the fixed navigation and Contact's Warp card; shortened its
+  lead to “Email is fastest.”
+- Removed the shared footer from every route.
+- Replaced Experience's explanatory header copy with “Professional and Leadership Experience.”
+- Reduced Education's FallingText hover/physics region from 170px to 88px.
+- Updated Projects' SplitText setup to animate characters inside whole-word wrappers, so
+  “Kubernetes” moves intact to the second line instead of splitting mid-word.
+- Removed the Skills closing “Prefer receipts…” CTA, the “live system” status mark, and the
+  Jolt/shuffle control. Reset remains available.
+
+**Verified:** the production build passes; all five affected routes were checked at the
+956×709 screenshot size and at 390px; no route has horizontal overflow; the shared footer
+is absent; the requested copy and controls are removed; and the browser console is clean.
+
+---
+
 # Portfolio handoff notes — v25 (Home location correction)
 
 - Changed the Home kicker from “ML/AI Engineer · London” to “ML/AI Engineer · Bahrain” at

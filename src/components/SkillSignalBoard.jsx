@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import Matter from 'matter-js';
-import { Activity, ArrowUpRight, RotateCcw, Shuffle } from 'lucide-react';
+import { Activity, ArrowUpRight, RotateCcw } from 'lucide-react';
 
 const CHANNELS = [
   {
@@ -143,7 +143,7 @@ export default function SkillSignalBoard() {
 
     if (REDUCED) {
       placeStatic();
-      apiRef.current = { nudge() {}, reset: placeStatic, jolt() {} };
+      apiRef.current = { nudge() {}, reset: placeStatic };
       return () => { apiRef.current = null; };
     }
 
@@ -239,14 +239,6 @@ export default function SkillSignalBoard() {
         });
         Body.setAngularVelocity(body, (Math.random() - 0.5) * 0.08);
       },
-      jolt() {
-        bodies.forEach((body, index) => {
-          Body.applyForce(body, body.position, {
-            x: (index - 1) * 0.025 + (Math.random() - 0.5) * 0.02,
-            y: (Math.random() - 0.5) * 0.055
-          });
-        });
-      },
       reset() {
         bodies.forEach((body, index) => {
           Body.setPosition(body, starts[index]);
@@ -288,7 +280,6 @@ export default function SkillSignalBoard() {
             <div className="sec-tag">Capability console</div>
             <h2>Skill signal board</h2>
           </div>
-          <div className="skillboard-heading-mark"><Activity size={17} aria-hidden="true" />live system</div>
         </div>
 
         <div className="skillboard reveal" style={{ '--channel': channel.color }}>
@@ -309,14 +300,6 @@ export default function SkillSignalBoard() {
               </button>
             ))}
             <div className="skillboard-console-controls">
-              <button
-                type="button"
-                onClick={() => { apiRef.current?.jolt(); pulseSignal(); }}
-                aria-label="Jolt signal modules"
-                title="Jolt signal modules"
-              >
-                <Shuffle size={17} aria-hidden="true" />
-              </button>
               <button
                 type="button"
                 onClick={() => apiRef.current?.reset()}

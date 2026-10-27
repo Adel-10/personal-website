@@ -365,7 +365,7 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
 /* Falling Text (education title) */
 .falling-text-container {
   position: relative; display: block;
-  min-height: 170px; cursor: pointer;
+  min-height: 88px; cursor: pointer;
 }
 .ft-canvas { position: absolute; inset: 0; z-index: 0; display: block; }
 .ft-canvas canvas { display: block; }
@@ -411,6 +411,7 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   overflow: hidden; /* masks the character rise */
   color: var(--ch, var(--accent));
 }
+.ch-word { display: inline-block; white-space: nowrap; }
 .ch-kicker {
   font-size: clamp(17px, 2.2vw, 22px);
   color: var(--text-dim);
@@ -488,12 +489,6 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
 }
 @media (max-width: 1180px) { .rail { display: none; } }
 
-/* ===== skills CTA ===== */
-.skills-cta { padding: 10px 0 60px; }
-.skills-cta p { color: var(--text-dim); }
-.skills-cta a { color: var(--c-blue); text-decoration: none; }
-.skills-cta a:hover { text-decoration: underline; }
-
 /* ===== unified skill signal board ===== */
 .skillboard-section { padding: 72px 0 64px; }
 .skillboard-heading {
@@ -501,12 +496,6 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   margin-bottom: 22px;
 }
 .skillboard-heading h2 { font-size: 30px; line-height: 1.1; letter-spacing: 0; }
-.skillboard-heading-mark {
-  display: flex; align-items: center; gap: 7px;
-  color: var(--c-green); font-family: var(--mono); font-size: 10px; text-transform: uppercase;
-}
-.skillboard-heading-mark svg { animation: skillboard-live 1.8s ease-in-out infinite; }
-@keyframes skillboard-live { 50% { opacity: .35; } }
 .skillboard {
   overflow: hidden; border: 1px solid var(--glass-border); border-radius: 8px;
   background: color-mix(in srgb, var(--bg) 88%, transparent);
@@ -675,7 +664,6 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   .skillboard-section { padding: 56px 0 40px; }
   .skillboard-heading { align-items: start; }
   .skillboard-heading h2 { font-size: 26px; }
-  .skillboard-heading-mark { padding-top: 5px; font-size: 9px; }
   .skillboard-channels { grid-template-columns: repeat(6, minmax(0, 1fr)); }
   .skillboard-channels > button {
     height: 58px; padding: 8px 4px; text-align: center;
@@ -700,7 +688,7 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   .skillboard-tool-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .skillboard-heading-mark svg, .skillboard-wiring > line.active, .skillboard-wave i { animation: none; }
+  .skillboard-wiring > line.active, .skillboard-wave i { animation: none; }
   .skillboard-module, .skillboard-channels > button, .skillboard-console-controls button { transition: none; }
 }
 
@@ -898,6 +886,7 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
 }
 
 /* contact */
+.contact-section { padding-top: 72px; }
 .contact-warp { text-align: center; }
 .contact-inner .contact-line {
   font-family: var(--mono); font-size: 14.5px;
@@ -916,8 +905,6 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   transition: transform .2s ease, border-color .2s ease, color .2s ease;
 }
 .contact-links a:hover { border-color: var(--accent-dim); color: var(--accent); transform: translateY(-2px); }
-
-footer { padding: 48px 0 56px; color: var(--text-dim); font-size: 13.5px; border-top: 1px solid var(--glass-border); margin-top: 64px; }
 
 /* scroll reveal */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity .7s ease, transform .7s ease; }

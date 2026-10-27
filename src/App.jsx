@@ -45,12 +45,6 @@ export default function App() {
           <Route path="/contact" element={<Contact />} />
           <Route path="*" element={<Home />} />
         </Routes>
-        <footer>
-          <div className="wrap">
-            Adel Mithaiwala · Built with React, Vite and React Bits backgrounds — no trackers, no analytics.
-            All figures and numbers are real artifacts from the linked repositories and their eval logs.
-          </div>
-        </footer>
     </HashRouter>
   );
 }
