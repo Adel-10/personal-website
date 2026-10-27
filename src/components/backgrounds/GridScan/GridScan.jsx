@@ -1,7 +1,9 @@
-import { BloomEffect, ChromaticAberrationEffect, EffectComposer, EffectPass, RenderPass } from 'postprocessing';
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import './GridScan.css';
+
+// LOCAL PATCH: this site always renders Grid Scan without post-processing, so the
+// unused composer/bloom/chromatic-aberration path is removed to keep it out of Projects.
 
 const vert = `
 varying vec2 vUv;
@@ -27,7 +29,6 @@ uniform float uLineJitter;
 uniform float uScanOpacity;
 uniform float uScanDirection;
 uniform float uNoise;
-uniform float uBloomOpacity;
 uniform float uScanGlow;
 uniform float uScanSoftness;
 uniform float uPhaseTaper;
@@ -256,10 +257,6 @@ void mainImage(out vec4 fragColor, in vec2 fragCoord)
   // LOCAL PATCH: fade alpha with distance too (upstream fades color only, which
   // renders distant lines BLACK on light backgrounds instead of fading them out)
   float alpha = clamp(max(lineVis * fade, combinedPulse), 0.0, 1.0);
-  float gx = 1.0 - smoothstep(tx * 2.0, tx * 2.0 + aax * 2.0, ax);
-  float gy = 1.0 - smoothstep(ty * 2.0, ty * 2.0 + aay * 2.0, ay);
-  float halo = max(gx, gy) * fade;
-  alpha = max(alpha, halo * clamp(uBloomOpacity, 0.0, 1.0));
   fragColor = vec4(color, alpha);
 }
 
@@ -280,11 +277,6 @@ export const GridScan = ({
   lineStyle = 'solid',
   lineJitter = 0.1,
   scanDirection = 'pingpong',
-  enablePost = true,
-  bloomIntensity = 0,
-  bloomThreshold = 0,
-  bloomSmoothing = 0,
-  chromaticAberration = 0.002,
   noiseIntensity = 0.01,
   scanGlow = 0.5,
   scanSoftness = 2,
@@ -301,9 +293,6 @@ export const GridScan = ({
 
   const rendererRef = useRef(null);
   const materialRef = useRef(null);
-  const composerRef = useRef(null);
-  const bloomRef = useRef(null);
-  const chromaRef = useRef(null);
   const rafRef = useRef(null);
 
   const lookTarget = useRef(new THREE.Vector2(0, 0));
@@ -433,7 +422,6 @@ export const GridScan = ({
       uLineJitter: { value: Math.max(0, Math.min(1, lineJitter || 0)) },
       uScanOpacity: { value: scanOpacity },
       uNoise: { value: noiseIntensity },
-      uBloomOpacity: { value: bloomIntensity },
       uScanGlow: { value: scanGlow },
       uScanSoftness: { value: scanSoftness },
       uPhaseTaper: { value: scanPhaseTaper },
@@ -459,37 +447,9 @@ export const GridScan = ({
     const quad = new THREE.Mesh(new THREE.PlaneGeometry(2, 2), material);
     scene.add(quad);
 
-    let composer = null;
-    if (enablePost) {
-      composer = new EffectComposer(renderer);
-      composerRef.current = composer;
-      const renderPass = new RenderPass(scene, camera);
-      composer.addPass(renderPass);
-
-      const bloom = new BloomEffect({
-        intensity: 1.0,
-        luminanceThreshold: bloomThreshold,
-        luminanceSmoothing: bloomSmoothing
-      });
-      bloom.blendMode.opacity.value = Math.max(0, bloomIntensity);
-      bloomRef.current = bloom;
-
-      const chroma = new ChromaticAberrationEffect({
-        offset: new THREE.Vector2(chromaticAberration, chromaticAberration),
-        radialModulation: true,
-        modulationOffset: 0.0
-      });
-      chromaRef.current = chroma;
-
-      const effectPass = new EffectPass(camera, bloom, chroma);
-      effectPass.renderToScreen = true;
-      composer.addPass(effectPass);
-    }
-
     const onResize = () => {
       renderer.setSize(container.clientWidth, container.clientHeight);
       material.uniforms.iResolution.value.set(container.clientWidth, container.clientHeight, renderer.getPixelRatio());
-      if (composerRef.current) composerRef.current.setSize(container.clientWidth, container.clientHeight);
     };
     window.addEventListener('resize', onResize);
 
@@ -532,11 +492,7 @@ export const GridScan = ({
 
       material.uniforms.iTime.value = now / 1000;
       renderer.clear(true, true, true);
-      if (composerRef.current) {
-        composerRef.current.render(dt);
-      } else {
-        renderer.render(scene, camera);
-      }
+      renderer.render(scene, camera);
       rafRef.current = requestAnimationFrame(tick);
     };
     rafRef.current = requestAnimationFrame(tick);
@@ -546,11 +502,6 @@ export const GridScan = ({
       window.removeEventListener('resize', onResize);
       material.dispose();
       quad.geometry.dispose();
-
-      if (composerRef.current) {
-        composerRef.current.dispose();
-        composerRef.current = null;
-      }
       renderer.dispose();
       renderer.forceContextLoss();
       container.removeChild(renderer.domElement);
@@ -565,17 +516,12 @@ export const GridScan = ({
     lineStyle,
     lineJitter,
     scanDirection,
-    enablePost,
     noiseIntensity,
-    bloomIntensity,
     scanGlow,
     scanSoftness,
     scanPhaseTaper,
     scanDuration,
     scanDelay,
-    bloomThreshold,
-    bloomSmoothing,
-    chromaticAberration,
     smoothTime,
     maxSpeed,
     skewScale,
@@ -594,7 +540,6 @@ export const GridScan = ({
       u.uGridScale.value = gridScale;
       u.uLineStyle.value = lineStyle === 'dashed' ? 1 : lineStyle === 'dotted' ? 2 : 0;
       u.uLineJitter.value = Math.max(0, Math.min(1, lineJitter || 0));
-      u.uBloomOpacity.value = Math.max(0, bloomIntensity);
       u.uNoise.value = Math.max(0, noiseIntensity);
       u.uScanGlow.value = scanGlow;
       u.uScanOpacity.value = Math.max(0, Math.min(1, scanOpacity));
@@ -604,14 +549,6 @@ export const GridScan = ({
       u.uScanDuration.value = Math.max(0.05, scanDuration);
       u.uScanDelay.value = Math.max(0.0, scanDelay);
     }
-    if (bloomRef.current) {
-      bloomRef.current.blendMode.opacity.value = Math.max(0, bloomIntensity);
-      bloomRef.current.luminanceMaterial.threshold = bloomThreshold;
-      bloomRef.current.luminanceMaterial.smoothing = bloomSmoothing;
-    }
-    if (chromaRef.current) {
-      chromaRef.current.offset.set(chromaticAberration, chromaticAberration);
-    }
   }, [
     lineThickness,
     linesColor,
@@ -619,10 +556,6 @@ export const GridScan = ({
     gridScale,
     lineStyle,
     lineJitter,
-    bloomIntensity,
-    bloomThreshold,
-    bloomSmoothing,
-    chromaticAberration,
     noiseIntensity,
     scanGlow,
     scanOpacity,

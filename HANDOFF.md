@@ -2,6 +2,19 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v28 (Grid Scan payload cleanup)
+
+- Removed Grid Scan's unused post-processing imports and disabled composer, bloom, and
+  chromatic-aberration path. Projects now renders the same graph-paper shader directly
+  through Three.js without fetching the post-processing chunk.
+- Kept the `postprocessing` dependency and Hyperspeed implementation unchanged because
+  Experience actively uses its bloom and SMAA pipeline.
+
+**Verified:** the production build passes; Grid Scan no longer imports the post-processing
+chunk, while Hyperspeed still does.
+
+---
+
 # Portfolio handoff notes — v27 (route-level code splitting)
 
 - Kept Home in the initial application bundle and converted Projects, Skills, Education,

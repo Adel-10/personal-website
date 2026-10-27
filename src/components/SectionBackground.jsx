@@ -64,8 +64,6 @@ function backgroundFor(kind) {
           lineJitter={0}
           scanDuration={2.5}
           scanDelay={2.5}
-          enablePost={false}
-          chromaticAberration={0}
           noiseIntensity={0}
         />
       );

@@ -45,9 +45,9 @@ npm run preview   # serve the production build locally
 - Fully static SPA. No backend, no secrets, no environment variables.
 - `vite.config.js` sets `base: './'`. Combined with `HashRouter`, the built site works from
   any path with no server rewrite rules.
-- **Git state:** the last commit is `091186b "Refine page layouts and skill board controls"`
-  (2026-10-27). The v27 route-splitting change is currently uncommitted. **What's on Vercel
-  is the commit, not the working tree.** Commit and push to deploy this change.
+- **Git state:** the last commit is `31d7650 "route splitting, change the page imports to
+  React.lazy()"` (2026-10-28). The v28 Grid Scan payload cleanup is currently uncommitted.
+  **What's on Vercel is the commit, not the working tree.** Commit and push to deploy it.
 - Build warning about chunks over 500 kB is expected. The large chunks (Spline runtime and
   physics, three.js) are lazy-loaded on the pages that use them.
 
@@ -104,7 +104,8 @@ These are explicit decisions Adel made during development.
 | react 19, react-dom, react-router-dom 7 | App, `HashRouter` routing |
 | vite 8, @vitejs/plugin-react 6 | Dev and build |
 | gsap 3.15 (incl. ScrollTrigger, SplitText, free since 3.13) | All scrollytelling, pins, scrubs, counters |
-| three 0.180, postprocessing | Lanyard, Liquid Ether, Hyperspeed, Grid Scan |
+| three 0.180 | Lanyard, Liquid Ether, Hyperspeed, Grid Scan |
+| postprocessing | Hyperspeed bloom and SMAA pipeline |
 | matter-js | FallingText title, Skill Signal Board |
 | @splinetool/react-spline + runtime | 3D robot on Home |
 | lucide-react | Icons in the Skill Signal Board |
@@ -159,6 +160,9 @@ legacy/                    Old single-file v2 site, kept for reference
 - **SectionBackground:** each background is its own lazy chunk. It mounts only while within
   ±25% of the viewport, so at most about two WebGL contexts are alive at once. It skips
   WebGL under reduced motion or when WebGL is missing. DotGrid is 2D canvas and always allowed.
+- **Grid Scan:** Projects uses the direct Three.js shader renderer only. Its unused
+  post-processing path was removed locally, so Projects does not fetch that dependency;
+  Hyperspeed still uses and loads `postprocessing` on Experience.
 - **PageHeader:**
   - `has-bg` gives the tall banner.
   - `.page-header.has-bg .wrap::before` is a soft radial pool of page color behind the text,
