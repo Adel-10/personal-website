@@ -2,6 +2,14 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v25 (Home location correction)
+
+- Changed the Home kicker from “ML/AI Engineer · London” to “ML/AI Engineer · Bahrain” at
+  Adel's request. King's College and education references to London remain unchanged.
+- Verified with a production build.
+
+---
+
 # Portfolio handoff notes — v24 (owner copy revision)
 
 ## What changed in v24

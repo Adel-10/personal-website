@@ -5,7 +5,7 @@ Single source of truth for any AI agent picking up this project. Read this first
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
-Last reconciled against the working tree on **2026-10-24**.
+Last reconciled against the working tree on **2026-10-27**.
 
 ---
 
@@ -45,10 +45,10 @@ npm run preview   # serve the production build locally
 - Fully static SPA. No backend, no secrets, no environment variables.
 - `vite.config.js` sets `base: './'`. Combined with `HashRouter`, the built site works from
   any path with no server rewrite rules.
-- **Git state:** the last commit is `a03ccac "Prepare portfolio for production"`
-  (2026-10-18). The owner-directed copy revision, removed sections, Vite security update,
-  and retired Contact-particles cleanup are currently uncommitted. **What's on Vercel is
-  the commit, not the working tree.** Commit and push to deploy these changes.
+- **Git state:** the last commit is `3834bce "Update portfolio wording and remove retired
+  sections"` (2026-10-27). The Home kicker's London → Bahrain correction is currently
+  uncommitted. **What's on Vercel is the commit, not the working tree.** Commit and push to
+  deploy this correction.
 - Build warning about chunks over 500 kB is expected. The large chunks (Spline runtime and
   physics, three.js) are lazy-loaded on the pages that use them.
 
@@ -177,7 +177,7 @@ legacy/                    Old single-file v2 site, kept for reference
 ### Home (`sections/Hero.jsx`)
 
 - Two-column `wrap-wide` grid.
-- **Left:** kicker "ML/AI Engineer · London", name as **TextPressure** (self-hosted Roboto Flex
+- **Left:** kicker "ML/AI Engineer · Bahrain", name as **TextPressure** (self-hosted Roboto Flex
   variable font; "Mithaiwala" in candle red), two lede paragraphs, and five quick-links
   (each lights a different candle on hover).
 - **Right:** the **Spline robot** (`prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode`),
@@ -325,7 +325,7 @@ tables in `SectionBackground.jsx` and must be kept in sync by hand.
 
 ## 10. Remaining release items and owner decisions
 
-1. **The working tree is uncommitted.** Commit and push to ship the v24 copy revision.
+1. **The working tree is uncommitted.** Commit and push to ship the v25 location correction.
 2. **Run one post-deploy check on Vercel.** The local production preview is clean and the
    known Spline WASM origin is allowed, but only Vercel applies `vercel.json`; check the live
    Home console and response headers after pushing.

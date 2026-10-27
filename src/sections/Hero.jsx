@@ -28,7 +28,7 @@ export default function Hero() {
     <header id="top">
       <div className="wrap wrap-wide hero-grid">
         <div className="hero-text">
-          <div className="kicker reveal">ML/AI Engineer · London</div>
+          <div className="kicker reveal">ML/AI Engineer · Bahrain</div>
           <h1 className="reveal hero-name" aria-label="Adel Mithaiwala">
             {/* "Mithaiwala" (from char index 5) wears the red candle */}
             <TextPressure text="Adel Mithaiwala" accentFrom={5} minFontSize={40} decorative />
