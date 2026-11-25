@@ -2,6 +2,30 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v32 (Projects counters and reduced motion)
+
+- Enabling reduced motion on Projects restores the original text of all 15 statistics,
+  including offscreen counters and any count already in progress.
+- Verified in Chrome with the production build. Checks covered opening the page with
+  reduced motion, switching before and during a count, turning animations back on,
+  and navigating away and back.
+
+---
+
+# Portfolio handoff notes — v31 (Experience card visibility and mobile navigation)
+
+- Experience cards stack vertically by default. On wide screens with motion enabled,
+  each group scrolls sideways if every card fits below the fixed navigation. The page
+  rechecks the available space when the window, card text or navigation changes size.
+- The navigation shows “Home” on phones and the brand name on larger screens.
+- Verified with the production build in Chrome. All five roles were readable at
+  1440×1000 with the horizontal rides and at 1280×590 with vertical scrolling.
+  At 1280×710 only the professional group scrolled sideways. Enlarging card text
+  or enabling reduced motion also switched to vertical scrolling. At 320px and
+  390px wide all six navigation links fit in one row and opened their pages.
+
+---
+
 # Portfolio handoff notes — v30 (graphics and page-load recovery)
 
 - Home, the 3D banners and the Education lanyard check for WebGL 2 before loading

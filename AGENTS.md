@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v30). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v32). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -45,9 +45,8 @@ npm run preview   # serve the production build locally
 - Fully static SPA. No backend, no secrets, no environment variables.
 - `vite.config.js` sets `base: './'`. Combined with `HashRouter`, the built site works from
   any path with no server rewrite rules.
-- **Git state:** the last commit is `7125aa3 "Removed Grid Scan’s unused post-processing"`
-  (2026-10-28). The v29 Spline poster and v30 recovery changes are currently uncommitted.
-  **What's on Vercel is the commit, not the working tree.** Commit and push to deploy it.
+- **Deployment:** Vercel builds pushes to `main`. Use `git status -sb` to check which
+  changes still need to be committed or pushed.
 - Build warning about chunks over 500 kB is expected. The large chunks (Spline runtime and
   physics, three.js) are lazy-loaded on the pages that use them.
 
@@ -154,6 +153,8 @@ legacy/                    Old single-file v2 site, kept for reference
 
 **Key mechanics**
 
+- **Navigation:** on screens up to 560px wide the brand link reads “Home”.
+  The same six destinations are available at every width.
 - **Route splitting:** Home stays in the initial bundle. Projects, Skills, Education,
   Experience, and Contact are `React.lazy()` imports behind one accessible `Suspense`
   fallback, so their page code and page-only dependencies load on navigation.
@@ -219,6 +220,7 @@ legacy/                    Old single-file v2 site, kept for reference
 
 - **Cards:** scrubbed rise-in, parallax on figures, tables and code, plus a
   **3-up bigstats strip** whose counters count up from 0 (values are in `data-count`).
+  Enabling reduced motion immediately restores every counter's published text.
 - **Rail:** a fixed progress rail on the right (hidden under 1180px). It has an orange fill
   bar, per-project dots in each chapter's candle, and click-to-jump. It targets each pinned
   chapter's measured ScrollTrigger start, so distant chapters land in one click.
@@ -280,7 +282,9 @@ legacy/                    Old single-file v2 site, kept for reference
     - **Student rep** (green): Informatics, Sep 2023–May 2025, elected twice, 200+ students.
     - **PhD mentee** (orange): Informatics PhD mentorship, Jan–Mar 2024, HCI, final
       presentation.
-- Under 861px or with reduced motion, the rides collapse to vertical stacks.
+- Cards stack vertically by default. From 861px wide, each group can scroll
+  horizontally when motion is enabled and its tallest card fits below the fixed
+  navigation. Resizing the window or changing text size rechecks the fit.
 
 ### Contact (`pages/Contact.jsx`, `sections/Contact.jsx`)
 
@@ -345,7 +349,7 @@ tables in `SectionBackground.jsx` and must be kept in sync by hand.
 
 ## 10. Remaining release items and owner decisions
 
-1. **The working tree is uncommitted.** Commit and push to ship the v29 poster and v30 recovery changes.
+1. **Deploy the reviewed changes.** Commit and push to `main` to trigger the Vercel build.
 2. **Run one post-deploy check on Vercel.** The local production preview is clean and the
    known Spline WASM origin is allowed, but only Vercel applies `vercel.json`; check the live
    Home console and response headers after pushing.

@@ -64,6 +64,7 @@ export default function useProjectsScrolly(ref) {
 
       // --- 4. stat counters (markup holds the final value; we zero it here so
       //         reduced-motion users simply see the real numbers) ---
+      const restoreCounters = [];
       q('.bigstat .num').forEach(el => {
         const target = parseFloat(el.dataset.count);
         if (Number.isNaN(target)) return;
@@ -71,13 +72,15 @@ export default function useProjectsScrolly(ref) {
         const pre = el.dataset.prefix || '';
         const suf = el.dataset.suffix || '';
         const finalText = el.textContent;
+        const restoreText = () => { el.textContent = finalText; };
+        restoreCounters.push(restoreText);
         const st = { v: 0 };
         el.textContent = pre + (0).toFixed(dec) + suf;
         gsap.to(st, {
           v: target, duration: 1.6, ease: 'power3.out',
           scrollTrigger: { trigger: el, start: 'top 88%', once: true },
           onUpdate: () => { el.textContent = pre + st.v.toFixed(dec) + suf; },
-          onComplete: () => { el.textContent = finalText; }
+          onComplete: restoreText
         });
       });
 
@@ -101,7 +104,10 @@ export default function useProjectsScrolly(ref) {
         });
       });
 
-      return () => splits.forEach(s => s.revert());
+      return () => {
+        restoreCounters.forEach(restore => restore());
+        splits.forEach(s => s.revert());
+      };
     });
 
     // lazy images change layout height when they arrive → re-measure triggers
