@@ -1,5 +1,5 @@
 import { BloomEffect, EffectComposer, EffectPass, RenderPass, SMAAEffect, SMAAPreset } from 'postprocessing';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 import './Hyperspeed.css';
@@ -45,6 +45,7 @@ const DEFAULT_EFFECT_OPTIONS = {
 const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
   const hyperspeed = useRef(null);
   const appRef = useRef(null);
+  const [initError, setInitError] = useState(null);
 
   useEffect(() => {
     if (appRef.current) {
@@ -468,11 +469,14 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
 
       loadAssets() {
         const assets = this.assets;
-        return new Promise(resolve => {
+        return new Promise((resolve, reject) => {
           const manager = new THREE.LoadingManager(resolve);
 
           const searchImage = new Image();
           const areaImage = new Image();
+          const onError = () => reject(new Error('Hyperspeed could not load its antialiasing textures.'));
+          searchImage.addEventListener('error', onError, { once: true });
+          areaImage.addEventListener('error', onError, { once: true });
           assets.smaa = {};
           searchImage.addEventListener('load', function () {
             assets.smaa.search = this;
@@ -1167,7 +1171,13 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
 
     const myApp = new App(container, options);
     appRef.current = myApp;
-    myApp.loadAssets().then(myApp.init);
+    // LOCAL PATCH: startup finishes outside React. Report failures to the
+    // renderer boundary and ignore completions after scrolling away.
+    myApp.loadAssets().then(() => {
+      if (!myApp.disposed) myApp.init();
+    }).catch(error => {
+      if (!myApp.disposed) setInitError(error);
+    });
 
     return () => {
       if (appRef.current) {
@@ -1177,6 +1187,7 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
     };
   }, [effectOptions]);
 
+  if (initError) throw initError;
   return <div id="lights" ref={hyperspeed}></div>;
 };
 

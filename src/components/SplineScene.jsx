@@ -1,34 +1,16 @@
-import { Component, Suspense, lazy } from 'react';
+import { lazy } from 'react';
+import RendererBoundary from './RendererBoundary.jsx';
 
 // Ported from 21st.dev "Spline Scene" (@serafim/splite) — Tailwind classes
 // replaced with site CSS. Lazy-loads @splinetool/react-spline so the runtime
 // (~1MB) only downloads when a scene is actually rendered.
 const Spline = lazy(() => import('@splinetool/react-spline'));
 
-class SplineErrorBoundary extends Component {
-  state = { failed: false };
-
-  static getDerivedStateFromError() {
-    return { failed: true };
-  }
-
-  render() {
-    return this.state.failed ? null : this.props.children;
-  }
-}
-
-export default function SplineScene({ scene, className }) {
+// LOCAL PATCH: gate the scene on WebGL 2 and let Home reveal the live canvas on load.
+export default function SplineScene({ scene, className, onLoad }) {
   return (
-    <SplineErrorBoundary>
-      <Suspense
-        fallback={
-          <div className="spline-loading">
-            <span className="spline-loader" />
-          </div>
-        }
-      >
-        <Spline scene={scene} className={className} />
-      </Suspense>
-    </SplineErrorBoundary>
+    <RendererBoundary loading={<div className="spline-loading"><span className="spline-loader" /></div>}>
+      <Spline scene={scene} className={className} onLoad={onLoad} />
+    </RendererBoundary>
   );
 }

@@ -1,11 +1,11 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v26). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v30). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
-Last reconciled against the working tree on **2026-10-28**.
+Last updated on **2026-11-26**.
 
 ---
 
@@ -38,15 +38,15 @@ The site has two jobs:
 ```bash
 npm install
 npm run dev       # http://localhost:5173
-npm run build     # → dist/   (passes as of 2026-10-28)
+npm run build     # → dist/   (passes as of 2026-10-30)
 npm run preview   # serve the production build locally
 ```
 
 - Fully static SPA. No backend, no secrets, no environment variables.
 - `vite.config.js` sets `base: './'`. Combined with `HashRouter`, the built site works from
   any path with no server rewrite rules.
-- **Git state:** the last commit is `31d7650 "route splitting, change the page imports to
-  React.lazy()"` (2026-10-28). The v28 Grid Scan payload cleanup is currently uncommitted.
+- **Git state:** the last commit is `7125aa3 "Removed Grid Scan’s unused post-processing"`
+  (2026-10-28). The v29 Spline poster and v30 recovery changes are currently uncommitted.
   **What's on Vercel is the commit, not the working tree.** Commit and push to deploy it.
 - Build warning about chunks over 500 kB is expected. The large chunks (Spline runtime and
   physics, three.js) are lazy-loaded on the pages that use them.
@@ -135,7 +135,7 @@ src/
     ChapterIntro.jsx       Projects-page pinned chapter scenes
     ProjectSection.jsx     Project card wrapper (--pc candle per project)
     SkillSignalBoard.jsx   Skills page main experience
-    SplineScene.jsx        21st.dev port + error boundary
+    SplineScene.jsx        21st.dev port + error boundary + Home load handoff
     WarpBackground.jsx     Magic UI port (CSS keyframes)
     CoolModeZone.jsx       Magic UI Cool Mode as one delegated listener
   data/tools.js            TOOLS list + CANDLES array (shared)
@@ -145,7 +145,7 @@ src/
   useEducationScrolly.js   Education timeline scrollytelling
   useExperienceScrolly.js  Experience horizontal rides (any number of .xp-pin sections)
 public/
-  assets/                  Project figures (PNG)
+  assets/                  Project figures (PNG) + robot intro poster (WebP)
   assets/lanyard/          wordmark.png (front), crest.png (back): KCL images from Adel
   favicon.svg              Solid-red, single-candle favicon
   robots.txt               Allows indexing
@@ -157,12 +157,22 @@ legacy/                    Old single-file v2 site, kept for reference
 - **Route splitting:** Home stays in the initial bundle. Projects, Skills, Education,
   Experience, and Contact are `React.lazy()` imports behind one accessible `Suspense`
   fallback, so their page code and page-only dependencies load on navigation.
+  A route error boundary keyed by pathname keeps navigation usable on failure.
+  The “Reload page” button retries the current hash route with a fresh document.
 - **SectionBackground:** each background is its own lazy chunk. It mounts only while within
   ±25% of the viewport, so at most about two WebGL contexts are alive at once. It skips
-  WebGL under reduced motion or when WebGL is missing. DotGrid is 2D canvas and always allowed.
+  animation under reduced motion. DotGrid uses a 2D canvas.
+- **RendererBoundary:** a shared WebGL 2 check gates the 3D banners, robot and lanyard
+  before their lazy imports run. Each renderer handles React errors and canvas context
+  loss locally. Banners fall back to page color, Home to its poster, and Education to a
+  static card. DotGrid has the same error isolation and skips the WebGL check.
 - **Grid Scan:** Projects uses the direct Three.js shader renderer only. Its unused
   post-processing path was removed locally, so Projects does not fetch that dependency;
   Hyperspeed still uses and loads `postprocessing` on Experience.
+- **Spline cold-load poster:** Home preloads a 30 kB close-up captured from the scene's
+  real opening frame. It covers the robot box while Spline downloads, then crossfades to
+  the paused live opening frame as the original zoom-out resumes. It stays visible when
+  reduced motion skips Spline or if the scene fails to load.
 - **PageHeader:**
   - `has-bg` gives the tall banner.
   - `.page-header.has-bg .wrap::before` is a soft radial pool of page color behind the text,
@@ -188,7 +198,9 @@ legacy/                    Old single-file v2 site, kept for reference
   (each lights a different candle on hover).
 - **Right:** the **Spline robot** (`prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode`),
   which tracks the mouse. A soft orange glow follows the cursor only inside the robot's box.
-- The robot is skipped under reduced motion, and the error boundary hides it if it fails to load.
+- A preloaded 30 kB WebP of the scene's opening close-up prevents a blank cold-load box and
+  fades into the live canvas before the zoom-out continues. Under reduced motion or if Spline
+  fails to load, the poster remains as the static fallback.
 
 ### Projects (`pages/Projects.jsx`, `useProjectsScrolly.js`)
 
@@ -286,7 +298,7 @@ legacy/                    Old single-file v2 site, kept for reference
 | LiquidEther, DotGrid, Hyperspeed | React Bits registry | Themed via SectionBackground only |
 | GridScan | React Bits | **LOCAL PATCHES:** alpha fades with distance (upstream painted lines black on light backgrounds); webcam/face-api code removed entirely |
 | TextPressure, DecryptedText, TextType, FallingText, CurvedLoop | React Bits | Hand-ported; TextPressure uses locally bundled Roboto Flex; FallingText uses matter-js, builds DOM nodes rather than innerHTML, and requires pointer movement before starting |
-| SplineScene | 21st.dev (serafim/splite) | Tailwind → CSS; error boundary added |
+| SplineScene | 21st.dev (serafim/splite) | Tailwind → CSS; error boundary; `onLoad` forwarded for the Home poster handoff |
 | WarpBackground, Cool Mode | Magic UI MCP | framer-motion → CSS keyframes; Cool Mode → delegated listener |
 | Lanyard | Original (React Bits-style behavior, no @react-three deps) | n/a |
 
@@ -333,7 +345,7 @@ tables in `SectionBackground.jsx` and must be kept in sync by hand.
 
 ## 10. Remaining release items and owner decisions
 
-1. **The working tree is uncommitted.** Commit and push to ship the v26 screenshot-feedback changes.
+1. **The working tree is uncommitted.** Commit and push to ship the v29 poster and v30 recovery changes.
 2. **Run one post-deploy check on Vercel.** The local production preview is clean and the
    known Spline WASM origin is allowed, but only Vercel applies `vercel.json`; check the live
    Home console and response headers after pushing.

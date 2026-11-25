@@ -1,4 +1,5 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from 'react';
+import { lazy, useEffect, useRef, useState } from 'react';
+import RendererBoundary from './RendererBoundary.jsx';
 
 // Each React Bits background is code-split into its own chunk and only mounted
 // while its section is near the viewport (±25% margin) — so at most ~2 WebGL
@@ -12,18 +13,6 @@ const REDUCED_MOTION =
   typeof window !== 'undefined' &&
   window.matchMedia &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-let webglOK = null;
-function hasWebGL() {
-  if (webglOK !== null) return webglOK;
-  try {
-    const c = document.createElement('canvas');
-    webglOK = !!(c.getContext('webgl2') || c.getContext('webgl'));
-  } catch {
-    webglOK = false;
-  }
-  return webglOK;
-}
 
 const HYPERSPEED_COLORS = {
   roadColor: 0xefe8db,
@@ -102,12 +91,6 @@ export default function SectionBackground({ kind }) {
     return () => io.disconnect();
   }, []);
 
-  const el = useMemo(() => {
-    if (REDUCED_MOTION) return null;
-    if (kind !== 'dot-grid' && !hasWebGL()) return null; // DotGrid is 2D canvas, the rest need WebGL
-    return backgroundFor(kind);
-  }, [kind]);
-
   return (
     <div
       ref={ref}
@@ -115,7 +98,11 @@ export default function SectionBackground({ kind }) {
       aria-hidden="true"
       style={kind === 'grid-scan' ? { background: 'var(--bg-alt)' } : undefined}
     >
-      {near && el && <Suspense fallback={null}>{el}</Suspense>}
+      {near && !REDUCED_MOTION && (
+        <RendererBoundary key={kind} needsWebGL2={kind !== 'dot-grid'}>
+          {backgroundFor(kind)}
+        </RendererBoundary>
+      )}
       <div className="bg-veil" />
     </div>
   );

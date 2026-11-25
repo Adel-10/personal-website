@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js';
 import {
@@ -9,25 +9,6 @@ import {
 // A React Bits-style "Lanyard": an ID card hanging from a textured strap, with
 // verlet-rope physics — grab the card and throw it around. Implemented in plain
 // three.js (no @react-three/* deps) to match the rest of this codebase.
-//
-// Reduced motion / no WebGL → renders a static card image instead.
-
-const REDUCED_MOTION =
-  typeof window !== 'undefined' &&
-  window.matchMedia &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-let webglOK = null;
-function hasWebGL() {
-  if (webglOK !== null) return webglOK;
-  try {
-    const c = document.createElement('canvas');
-    webglOK = !!(c.getContext('webgl2') || c.getContext('webgl'));
-  } catch {
-    webglOK = false;
-  }
-  return webglOK;
-}
 
 function srgb(tex) {
   tex.colorSpace = THREE.SRGBColorSpace;
@@ -46,14 +27,8 @@ function loadImage(name, onLoad) {
 
 export default function Lanyard() {
   const hostRef = useRef(null);
-  const fallback = REDUCED_MOTION || !hasWebGL();
-  const fallbackSrc = useMemo(
-    () => (fallback ? makeFrontCanvas().toDataURL('image/png') : null),
-    [fallback]
-  );
 
   useEffect(() => {
-    if (fallback) return;
     const host = hostRef.current;
     if (!host) return;
 
@@ -303,10 +278,6 @@ export default function Lanyard() {
       renderer.dispose();
       host.removeChild(renderer.domElement);
     };
-  }, [fallback]);
-
-  if (fallback) {
-    return <img className="lanyard-fallback" src={fallbackSrc} alt="King's College London student card" />;
-  }
+  }, []);
   return <div ref={hostRef} className="lanyard-canvas" aria-label="Interactive King's College London lanyard — drag the card" />;
 }

@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SplineScene from '../components/SplineScene.jsx';
 import TextPressure from '../components/text/TextPressure.jsx';
@@ -14,6 +14,7 @@ const REDUCED_MOTION =
 export default function Hero() {
   const splineRef = useRef(null);
   const glowRef = useRef(null);
+  const [splineReady, setSplineReady] = useState(false);
 
   function onGlowMove(e) {
     const box = splineRef.current;
@@ -22,6 +23,21 @@ export default function Hero() {
     const r = box.getBoundingClientRect();
     // 90 = half the glow's 180px size, so it centers on the cursor
     glow.style.transform = `translate(${e.clientX - r.left - 90}px, ${e.clientY - r.top - 90}px)`;
+  }
+
+  function onSplineLoad(app) {
+    // Hold the first live frame briefly so the poster hands off into the scene's
+    // own close-up before its zoom-out animation continues.
+    const canvas = splineRef.current?.querySelector('canvas');
+    if (!canvas) return;
+    app.stop?.();
+    requestAnimationFrame(() => {
+      if (!canvas.isConnected) return;
+      setSplineReady(true);
+      requestAnimationFrame(() => {
+        if (canvas.isConnected) app.play?.();
+      });
+    });
   }
 
   return (
@@ -49,16 +65,30 @@ export default function Hero() {
             <Link to="/contact">contact →</Link>
           </div>
         </div>
-        <div className="hero-spline" aria-hidden="true" ref={splineRef} onMouseMove={onGlowMove}>
+        <div
+          className={`hero-spline${splineReady ? ' is-ready' : ''}`}
+          aria-hidden="true"
+          ref={splineRef}
+          onMouseMove={onGlowMove}
+        >
           {!REDUCED_MOTION && (
-            <>
-              <SplineScene
-                scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
-                className="spline-canvas"
-              />
-              <div className="spline-glow" ref={glowRef} />
-            </>
+            <SplineScene
+              scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
+              className="spline-canvas"
+              onLoad={onSplineLoad}
+            />
           )}
+          <img
+            className="spline-poster"
+            src="/assets/robot-intro-poster.webp"
+            alt=""
+            width="1146"
+            height="1176"
+            loading="eager"
+            fetchPriority="high"
+            draggable="false"
+          />
+          {!REDUCED_MOTION && <div className="spline-glow" ref={glowRef} />}
         </div>
       </div>
     </header>

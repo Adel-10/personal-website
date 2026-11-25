@@ -1,10 +1,23 @@
-import { lazy, Suspense, useRef } from 'react';
+import { lazy, useRef, useState } from 'react';
 import useReveal from '../useReveal.js';
 import useEducationScrolly from '../useEducationScrolly.js';
 import PageHeader from '../components/PageHeader.jsx';
 import FallingText from '../components/text/FallingText.jsx';
+import RendererBoundary from '../components/RendererBoundary.jsx';
+import { makeFrontCanvas } from '../components/lanyard/kclTextures.js';
 
 const Lanyard = lazy(() => import('../components/lanyard/Lanyard.jsx'));
+
+function StaticCard() {
+  const [src] = useState(() => {
+    try {
+      return makeFrontCanvas().toDataURL('image/png');
+    } catch {
+      return `${import.meta.env.BASE_URL}assets/lanyard/wordmark.png`;
+    }
+  });
+  return <img className="lanyard-fallback" src={src} alt="King's College London student card" />;
+}
 
 // Chronological climb: school → foundation → BSc → what's next, with the KCL
 // lanyard pinned alongside. Confetti at "first-class with distinction".
@@ -80,9 +93,11 @@ export default function Education() {
 
           <aside className="edu-side" aria-label="KCL student card">
             <div className="lanyard-wrap edu-lanyard">
-              <Suspense fallback={null}>
-                <Lanyard />
-              </Suspense>
+              {window.matchMedia('(prefers-reduced-motion: reduce)').matches ? <StaticCard /> : (
+                <RendererBoundary fallback={<StaticCard />}>
+                  <Lanyard />
+                </RendererBoundary>
+              )}
             </div>
           </aside>
         </div>

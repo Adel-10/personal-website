@@ -2,6 +2,39 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v30 (graphics and page-load recovery)
+
+- Home, the 3D banners and the Education lanyard check for WebGL 2 before loading
+  their renderers. Each renderer has a local fallback for startup errors or loss of its
+  canvas context. Education's 2D Dot Grid runs independently of WebGL availability.
+- Failed page imports show a “Reload page” button below the navigation. Navigating
+  to another route clears the error. Reloading retries the current URL.
+- Verified in local production-build Chrome tests using the configured Vercel headers.
+  Tests covered WebGL 2 denial, a successful probe followed by a refused renderer,
+  context loss on running Grid Scan, lanyard and live Spline canvases, missing decorative chunks,
+  and a failed Contact download followed by navigation away, return and successful reload.
+
+---
+
+# Portfolio handoff notes — v29 (Spline cold-load poster)
+
+- Extracted the first clean close-up from Adel's robot-only screen recording and saved it
+  as a 30 kB WebP poster (`public/assets/robot-intro-poster.webp`).
+- Preloaded the poster and placed it over the Home robot box, so uncached visitors see the
+  robot immediately instead of a blank area while the Spline runtime, scene, and physics load.
+- On Spline load, the live application pauses for the handoff frame, the poster fades out,
+  and the scene resumes its original zoom-out animation. The poster remains as the static
+  fallback for reduced motion and if Spline fails to load.
+- Added a local `SplineScene` patch that forwards Spline's `onLoad` callback to Home.
+
+**Source frame:** robot-only recording at 0.60 s, 1146×1176; WebP quality 82, about 30 kB.
+
+**Verified:** the production build passes; a cold browser load shows the poster before the
+canvas is ready; the poster reaches zero opacity only after the live canvas mounts; the
+original zoom-out completes; and the 390 px layout has no horizontal overflow.
+
+---
+
 # Portfolio handoff notes — v28 (Grid Scan payload cleanup)
 
 - Removed Grid Scan's unused post-processing imports and disabled composer, bloom, and
