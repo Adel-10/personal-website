@@ -18,12 +18,12 @@ export default function useEducationScrolly(ref) {
     mm.add('(prefers-reduced-motion: no-preference)', () => {
       const compact = window.matchMedia('(max-width: 640px)').matches;
       // 1. the line draws as you descend
-      const fill = q('.edu-line-fill')[0];
-      const story = q('.edu-story')[0];
-      if (fill && story) {
+      const line = q('.edu-line')[0];
+      const fill = line?.querySelector('.edu-line-fill');
+      if (fill) {
         gsap.fromTo(fill, { scaleY: 0 }, {
           scaleY: 1, ease: 'none', transformOrigin: 'top',
-          scrollTrigger: { trigger: story, start: 'top 70%', end: 'bottom 65%', scrub: true }
+          scrollTrigger: { trigger: line, start: 'top 70%', end: 'clamp(bottom 65%)', scrub: true }
         });
       }
 

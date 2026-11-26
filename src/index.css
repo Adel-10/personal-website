@@ -720,18 +720,20 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
 }
 .edu-side { position: sticky; top: 90px; }
 .edu-lanyard { height: 540px; margin-bottom: 0; }
-.edu-story { position: relative; padding-left: 36px; }
+.edu-story {
+  --edu-milestone-gap: 54px;
+  position: relative; padding-left: 36px;
+}
 .edu-line {
-  position: absolute; left: 8px; top: 8px; bottom: 8px; width: 3px;
+  position: absolute; left: 8px; top: 8px; bottom: var(--edu-milestone-gap); width: 3px;
   background: var(--glass-border); border-radius: 3px;
 }
 .edu-line-fill {
   position: absolute; inset: 0;
   background: var(--c-orange);
   border-radius: 3px;
-  transform: scaleY(0);
 }
-.milestone { position: relative; margin-bottom: 54px; }
+.milestone { position: relative; margin-bottom: var(--edu-milestone-gap); }
 .milestone::before {
   content: "";
   position: absolute; left: -34px; top: 14px;

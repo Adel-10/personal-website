@@ -2,6 +2,14 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v39 (Education timeline endpoint)
+
+- Aligned the Education timeline track with the bottom of the final card.
+- Capped the fill animation at the maximum scroll position so it can finish on short
+  pages and viewports. Reduced motion shows the completed line.
+
+---
+
 # Portfolio handoff notes — v38 (Education and Experience title interactions)
 
 - Education's Restart button sits below the falling words. Moving over a word starts the

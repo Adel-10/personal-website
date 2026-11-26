@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v38). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v39). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -251,8 +251,9 @@ legacy/                    Old single-file v2 site, kept for reference
 - **Header:** green Dot Grid with the title as **FallingText**. Moving the pointer over a
   word starts the drop. **↺ restart** sits below the physics area and restores the
   title. The physics area keeps its pre-drop height when the words animate.
-- **Body:** a timeline whose line draws itself on scroll. Year stamps pop in. **The KCL
-  lanyard rides sticky on the right.**
+- **Body:** the timeline line draws on scroll and finishes at the bottom of the final card.
+  Reduced motion shows the completed line. Year stamps pop in. **The KCL lanyard rides
+  sticky on the right.**
 - **Three milestones:**
   1. **2022:** Ibn Khuldoon National School. Top of class, plus awards.
   2. **'22–'23:** KCL CS Foundation Year. 3 A* equivalents.
