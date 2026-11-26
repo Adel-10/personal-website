@@ -2,6 +2,17 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v37 (Leadership scrolling on short desktops)
+
+- Leadership uses more of the available width on narrower desktops and tighter
+  headings, statistics and spacing in shorter windows. Body copy keeps its size.
+- Verified in Chrome at normal zoom. All three cards were fully readable while
+  scrolling sideways at 1280×710, 1280×625 and 900×650. The vertical fallback
+  also worked on mobile, in very short windows, with enlarged text and with
+  reduced motion.
+
+---
+
 # Portfolio handoff notes — v36 (robot opening frame)
 
 - Replaced the earlier screen-recording crop with a 41 kB transparent WebP of Spline's

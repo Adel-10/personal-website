@@ -804,6 +804,25 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   font-family: var(--mono); font-size: 13px; color: var(--text-dim);
 }
 .xp-pin.is-horizontal .xp-hint { display: block; }
+/* Size leadership cards before the scroll hook measures whether they fit. */
+@media (min-width: 861px) and (prefers-reduced-motion: no-preference) {
+  #leadership { --xp-panel-width: min(84vw, 860px); }
+  #leadership .xp-panel {
+    width: var(--xp-panel-width);
+    padding-block: clamp(18px, 3.6vh, 34px);
+  }
+  #leadership .xp-pin.is-horizontal .xp-track {
+    padding-inline: calc((100% - var(--xp-panel-width)) / 2);
+  }
+  #leadership .xp-co { font-size: clamp(40px, min(7vw, 8.5vh), 84px); }
+  #leadership .xp-meta { margin-bottom: clamp(10px, 1.9vh, 20px); }
+  #leadership .xp-big {
+    font-size: clamp(40px, min(5vw, 7vh), 64px);
+    margin-bottom: clamp(10px, 1.8vh, 18px);
+  }
+  #leadership .xp-li { line-height: 1.5; margin-bottom: clamp(8px, 1.45vh, 14px); }
+  #leadership .xp-chips { margin-top: clamp(10px, 1.8vh, 18px); }
+}
 @media (max-width: 860px) {
   .xp-panel { width: 100%; }
 }

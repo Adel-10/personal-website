@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v36). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v37). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -285,7 +285,9 @@ legacy/                    Old single-file v2 site, kept for reference
       presentation.
 - Cards stack vertically by default. From 861px wide, each group can scroll
   horizontally when motion is enabled and its tallest card fits below the fixed
-  navigation. Resizing the window or changing text size rechecks the fit.
+  navigation. Leadership uses wider cards on narrow desktops and scales its
+  headings, statistics and spacing with viewport height. Resizing the window or
+  changing text size rechecks the fit.
 
 ### Contact (`pages/Contact.jsx`, `sections/Contact.jsx`)
 
