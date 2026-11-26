@@ -2,6 +2,19 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v36 (robot opening frame)
+
+- Replaced the earlier screen-recording crop with a 41 kB transparent WebP of Spline's
+  paused opening canvas. The poster scales by height and clips horizontally like the
+  live camera, with the site background visible around it.
+- Home keeps the live camera paused until the poster's opacity transition finishes,
+  then resumes the original zoom-out.
+- Verified in local Chrome at 1440×900 after navigating from Projects and at
+  390×844 on first load. The poster and live opening silhouettes aligned in both
+  cases. Reduced motion and WebGL context loss both showed the static poster.
+
+---
+
 # Portfolio handoff notes — v35 (section labels)
 
 - Removed “Capabilities” and “Capability console” from Skills, the small “Education”

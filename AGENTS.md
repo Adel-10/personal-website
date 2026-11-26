@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v35). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v36). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -170,9 +170,9 @@ legacy/                    Old single-file v2 site, kept for reference
 - **Grid Scan:** Projects uses the direct Three.js shader renderer only. Its unused
   post-processing path was removed locally, so Projects does not fetch that dependency;
   Hyperspeed still uses and loads `postprocessing` on Experience.
-- **Spline cold-load poster:** Home preloads a 30 kB close-up captured from the scene's
-  real opening frame. It covers the robot box while Spline downloads, then crossfades to
-  the paused live opening frame as the original zoom-out resumes. It stays visible when
+- **Spline cold-load poster:** Home preloads a 41 kB transparent capture of the paused
+  opening canvas. The poster scales by height and clips at the sides to match the live
+  camera. The original zoom-out resumes once the fade finishes. The poster stays visible when
   reduced motion skips Spline or if the scene fails to load.
 - **PageHeader:**
   - `has-bg` gives the tall banner.
@@ -199,7 +199,7 @@ legacy/                    Old single-file v2 site, kept for reference
   (each lights a different candle on hover).
 - **Right:** the **Spline robot** (`prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode`),
   which tracks the mouse. A soft orange glow follows the cursor only inside the robot's box.
-- A preloaded 30 kB WebP of the scene's opening close-up prevents a blank cold-load box and
+- A preloaded WebP of the scene's opening close-up prevents a blank cold-load box and
   fades into the live canvas before the zoom-out continues. Under reduced motion or if Spline
   fails to load, the poster remains as the static fallback.
 

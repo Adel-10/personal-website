@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import SplineScene from '../components/SplineScene.jsx';
 
@@ -13,7 +13,7 @@ const REDUCED_MOTION =
 export default function Hero() {
   const splineRef = useRef(null);
   const glowRef = useRef(null);
-  const [splineReady, setSplineReady] = useState(false);
+  const posterRef = useRef(null);
 
   function onGlowMove(e) {
     const box = splineRef.current;
@@ -25,17 +25,18 @@ export default function Hero() {
   }
 
   function onSplineLoad(app) {
-    // Hold the first live frame briefly so the poster hands off into the scene's
-    // own close-up before its zoom-out animation continues.
-    const canvas = splineRef.current?.querySelector('canvas');
-    if (!canvas) return;
-    app.stop?.();
-    requestAnimationFrame(() => {
+    const box = splineRef.current;
+    const poster = posterRef.current;
+    const canvas = app.canvas;
+    if (!box?.contains(canvas) || !poster) return;
+
+    // Keep the camera on the matching opening pose until the poster is gone.
+    app.stop();
+    requestAnimationFrame(async () => {
       if (!canvas.isConnected) return;
-      setSplineReady(true);
-      requestAnimationFrame(() => {
-        if (canvas.isConnected) app.play?.();
-      });
+      box.classList.add('is-ready');
+      await Promise.allSettled(poster.getAnimations().map(animation => animation.finished));
+      if (canvas.isConnected) app.play();
     });
   }
 
@@ -62,7 +63,7 @@ export default function Hero() {
           </div>
         </div>
         <div
-          className={`hero-spline${splineReady ? ' is-ready' : ''}`}
+          className="hero-spline"
           aria-hidden="true"
           ref={splineRef}
           onMouseMove={onGlowMove}
@@ -76,10 +77,11 @@ export default function Hero() {
           )}
           <img
             className="spline-poster"
+            ref={posterRef}
             src="/assets/robot-intro-poster.webp"
             alt=""
-            width="1146"
-            height="1176"
+            width="1788"
+            height="1200"
             loading="eager"
             fetchPriority="high"
             draggable="false"
