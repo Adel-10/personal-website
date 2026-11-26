@@ -433,7 +433,8 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
           return;
         }
 
-        this.renderer.setSize(width, height);
+        // LOCAL PATCH: CSS owns the canvas layout. The pinned banner can reflow after this event.
+        this.renderer.setSize(width, height, false);
         this.camera.aspect = width / height;
         this.camera.updateProjectionMatrix();
         this.composer.setSize(width, height);
@@ -1147,12 +1148,15 @@ const Hyperspeed = ({ effectOptions = DEFAULT_EFFECT_OPTIONS }) => {
       }
     `;
 
+    const logicalSize = new THREE.Vector2();
     function resizeRendererToDisplaySize(renderer, setSize) {
       const canvas = renderer.domElement;
       const width = canvas.clientWidth;
       const height = canvas.clientHeight;
       if (width <= 0 || height <= 0) return false;
-      const needResize = canvas.width !== width || canvas.height !== height;
+      // LOCAL PATCH: compare CSS pixels on both sides. The drawing buffer is larger on Retina.
+      renderer.getSize(logicalSize);
+      const needResize = logicalSize.x !== width || logicalSize.y !== height;
       if (needResize) {
         setSize(width, height, false);
       }

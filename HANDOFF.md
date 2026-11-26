@@ -2,6 +2,16 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v41 (Hyperspeed resize check)
+
+- The Experience road now compares its renderer and layout sizes in CSS pixels.
+  High-density canvases keep their full resolution without rerunning resize work every frame.
+- Kept the canvas sized by CSS so it follows the pinned banner when the layout settles
+  after a window resize. Verified steady frames and actual resizes in Chrome at 1×, 1.25×
+  and 2× density, as well as acceleration, route cleanup and the reduced-motion fallback.
+
+---
+
 # Portfolio handoff notes — v40 (Education scroll and artwork; deferred Home robot)
 
 - Active Education title physics no longer consumes the mouse wheel. Only the projected

@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v40). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v41). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -305,7 +305,8 @@ legacy/                    Old single-file v2 site, kept for reference
 
 | Component | Source | Local changes |
 |---|---|---|
-| LiquidEther, DotGrid, Hyperspeed | React Bits registry | Themed via SectionBackground only |
+| LiquidEther, DotGrid | React Bits registry | Themed via SectionBackground |
+| Hyperspeed | React Bits registry | Themed via SectionBackground; compares logical canvas dimensions to avoid redundant resize work on high-density screens |
 | GridScan | React Bits | **LOCAL PATCHES:** alpha fades with distance (upstream painted lines black on light backgrounds); webcam/face-api code removed entirely |
 | DecryptedText, TextType, FallingText, CurvedLoop | React Bits | Hand-ported; FallingText uses matter-js, builds DOM nodes, and requires pointer movement before starting |
 | SplineScene | 21st.dev (serafim/splite) | Tailwind → CSS; error boundary; `onLoad` forwarded for the Home poster handoff |
