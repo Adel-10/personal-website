@@ -22,9 +22,8 @@ export default function FallingText({ text = '', highlightWords = [], gravity = 
   const [runKey, setRunKey] = useState(0);
 
   function startFromRealPointerMove(event) {
-    if (started || event.pointerType === 'touch') return;
-    // LOCAL PATCH: pointerenter can fire when the pinned title scrolls under a
-    // stationary cursor. Requiring pointer movement keeps this a real hover.
+    // LOCAL PATCH: only real movement over a word starts the drop.
+    if (started || event.pointerType === 'touch' || !event.target.classList.contains('ft-word')) return;
     setStarted(true);
   }
 
@@ -50,6 +49,8 @@ export default function FallingText({ text = '', highlightWords = [], gravity = 
     const { Engine, Render, Runner, World, Bodies, Body, Mouse, MouseConstraint } = Matter;
     const container = containerRef.current;
     const w = container.offsetWidth, h = container.offsetHeight;
+    // Keep the floor and controls in place when the words leave normal flow.
+    container.style.minHeight = `${h}px`;
 
     const engine = Engine.create();
     engine.world.gravity.y = gravity;
@@ -121,12 +122,12 @@ export default function FallingText({ text = '', highlightWords = [], gravity = 
       render.canvas.remove();
       World.clear(engine.world, false);
       Engine.clear(engine);
+      container.style.minHeight = '';
     };
   }, [started, runKey, gravity]);
 
   // restore the original layout and RE-ARM: stays put until the next hover
-  function restart(e) {
-    e.stopPropagation();
+  function restart() {
     setStarted(false);      // tears down the physics world
     setRunKey(k => k + 1);  // rebuilds pristine static spans
   }
@@ -136,17 +137,14 @@ export default function FallingText({ text = '', highlightWords = [], gravity = 
   }
 
   return (
-    <span
-      className={`falling-text-container ${className}`}
-      ref={containerRef}
-      onPointerMove={startFromRealPointerMove}
-      title={started ? undefined : 'hover me'}
-    >
-      <span className="ft-canvas" ref={canvasRef} aria-hidden="true" />
-      <span className="ft-words" ref={textRef} />
-      {started && (
-        <button className="ft-restart" onClick={restart} aria-label="Restore the title">↺ restart</button>
-      )}
-    </span>
+    <>
+      <span className={`falling-text-container ${className}`} ref={containerRef} key={runKey}>
+        <span className="ft-canvas" ref={canvasRef} aria-hidden="true" />
+        <span className="ft-words" ref={textRef} onPointerMove={startFromRealPointerMove} />
+      </span>
+      <button type="button" className="ft-restart" disabled={!started} onClick={restart} aria-label="Restore the title">
+        ↺ restart
+      </button>
+    </>
   );
 }

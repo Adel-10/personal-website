@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v37). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v38). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -248,10 +248,9 @@ legacy/                    Old single-file v2 site, kept for reference
 
 ### Education (`pages/Education.jsx`, `useEducationScrolly.js`)
 
-- **Header:** green Dot Grid with the title as **FallingText**. On *hover* the words drop
-  with physics and can be dragged. **↺ restart** restores the layout and re-arms on the next
-  hover. The drop requires a real pointer-move event, so scrolling a stationary cursor over
-  the pinned title does not trigger it. Its hover/physics region is 88px tall.
+- **Header:** green Dot Grid with the title as **FallingText**. Moving the pointer over a
+  word starts the drop. **↺ restart** sits below the physics area and restores the
+  title. The physics area keeps its pre-drop height when the words animate.
 - **Body:** a timeline whose line draws itself on scroll. Year stamps pop in. **The KCL
   lanyard rides sticky on the right.**
 - **Three milestones:**
@@ -270,7 +269,7 @@ legacy/                    Old single-file v2 site, kept for reference
 ### Experience (`pages/Experience.jsx`, `useExperienceScrolly.js`)
 
 - **Header:** Hyperspeed, with a draggable **CurvedLoop** ribbon reading "Experience ✦ KPMG ✦
-  Batelco ✦ King's ✦".
+  Batelco ✦ King's ✦". Blank space around the ribbon passes clicks through to Hyperspeed.
 - The page is **two pinned horizontal "rides"**. Vertical scroll drives sideways.
   - **Ride 1, Professional:**
     - **KPMG** (red): AI Team Intern, Jun–Aug 2025. Azure OpenAI, multi-agent RAG,

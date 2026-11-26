@@ -2,6 +2,17 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v38 (Education and Experience title interactions)
+
+- Education's Restart button sits below the falling words. Moving over a word starts the
+  effect. Restart restores the title and leaves it armed for the next deliberate hover.
+- Experience's ribbon still drags from its text. Blank space around the text passes
+  clicks through to Hyperspeed.
+- Verified in Chrome at desktop and phone widths, including three Education resets,
+  letter dragging, clicks through blank space, and the reduced-motion fallbacks.
+
+---
+
 # Portfolio handoff notes — v37 (Leadership scrolling on short desktops)
 
 - Leadership uses more of the available width on narrower desktops and tighter

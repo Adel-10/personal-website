@@ -366,31 +366,39 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
 .decrypted-text { font-family: var(--mono); letter-spacing: -0.01em; }
 
 /* Curved Loop (experience title) */
-.curved-loop-svg { width: 100%; height: auto; display: block; cursor: grab; touch-action: pan-y; }
-.curved-loop-svg:active { cursor: grabbing; }
+.curved-loop-svg { width: 100%; height: auto; display: block; }
 .cl-text {
   font-size: 96px; font-weight: 750; letter-spacing: -0.02em;
   fill: var(--c-purple); user-select: none;
+}
+/* LOCAL PATCH: only the ribbon text can start a drag. The empty area hits Hyperspeed. */
+@media (prefers-reduced-motion: no-preference) {
+  .experience-page .page-header .wrap { pointer-events: none; }
+  .experience-page .page-header .sec-sub { pointer-events: auto; width: fit-content; }
+  .curved-loop-svg { touch-action: pan-y; }
+  .cl-text { pointer-events: visiblePainted; cursor: grab; }
+  .curved-loop-svg:active .cl-text { cursor: grabbing; }
 }
 
 /* Falling Text (education title) */
 .falling-text-container {
   position: relative; display: block;
-  min-height: 88px; cursor: pointer;
+  min-height: 88px;
 }
 .ft-canvas { position: absolute; inset: 0; z-index: 0; display: block; }
 .ft-canvas canvas { display: block; }
 .ft-words { position: relative; z-index: 1; display: block; }
-.ft-word { display: inline-block; margin: 0 8px 8px 0; }
+.ft-word { display: inline-block; margin: 0 8px 8px 0; cursor: pointer; }
 .ft-highlight { color: var(--c-blue); }
 .ft-restart {
-  position: absolute; right: 0; bottom: 0; z-index: 2;
+  display: block; margin: 12px 0 0 auto;
   font-family: var(--mono); font-size: 13px;
   color: var(--text-dim); background: var(--card-strong);
   border: 1px solid var(--glass-border); border-radius: 999px;
   padding: 5px 14px; cursor: pointer;
   transition: color .2s, border-color .2s;
 }
+.ft-restart:disabled { visibility: hidden; }
 .ft-restart:hover { color: var(--c-orange); border-color: var(--c-orange); }
 
 /* ===== scrollytelling (Projects page) ===== */

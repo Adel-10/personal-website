@@ -10,7 +10,7 @@ export default function Experience() {
   const main = useRef(null);
   useExperienceScrolly(main);
   return (
-    <main id="main-content" className="page" ref={main} tabIndex="-1">
+    <main id="main-content" className="page experience-page" ref={main} tabIndex="-1">
       <PageHeader
         title={
           <CurvedLoop marqueeText="Experience ✦ KPMG ✦ Batelco ✦ King's ✦" curveAmount={110} />
