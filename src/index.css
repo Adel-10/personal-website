@@ -1,11 +1,8 @@
-/* TextPressure: self-host only the Latin subset of Roboto Flex's standard axes.
-   Keeping this in static CSS lets the production CSP reject inline styles. */
 @font-face {
-  font-family: 'Roboto Flex Variable';
-  src: url('@fontsource-variable/roboto-flex/files/roboto-flex-latin-standard-normal.woff2') format('woff2-variations');
-  font-style: oblique 0deg 10deg;
-  font-weight: 100 1000;
-  font-stretch: 25% 151%;
+  font-family: 'Hero Roboto';
+  src: url('/assets/fonts/roboto-latin-400-normal.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
   font-display: swap;
 }
 
@@ -168,6 +165,12 @@ h1 {
   line-height: 1.05; letter-spacing: -0.03em; font-weight: 750;
   margin-bottom: 22px;
 }
+.hero-name {
+  font-family: 'Hero Roboto', var(--sans);
+  font-size: clamp(34px, 5.2vw, 66px);
+  font-weight: 400;
+}
+.hero-name span { color: var(--c-red); }
 h1 .grad { color: var(--c-red); }
 .lede { color: var(--text-dim); max-width: 660px; font-size: 18.5px; margin-bottom: 14px; }
 .lede strong { color: var(--text); font-weight: 600; }
@@ -337,7 +340,7 @@ td strong { color: var(--pc, var(--accent)); }
 
 figure { margin: 20px 0 6px; }
 figure img {
-  width: 100%; border-radius: 12px; border: 1px solid var(--glass-border);
+  width: 100%; height: auto; border-radius: 12px; border: 1px solid var(--glass-border);
   background: #fff; display: block;
 }
 figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
@@ -350,19 +353,6 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
   padding: 0; margin: -1px; overflow: hidden;
   clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
-
-/* Text Pressure (home hero name) */
-.hero-name { margin-bottom: 22px; }
-.text-pressure {
-  font-family: 'Roboto Flex Variable', var(--sans);
-  display: flex; justify-content: space-between; align-items: center;
-  width: 100%; max-width: 620px;
-  line-height: 1; font-weight: 100;
-  color: var(--text);
-  overflow: hidden; user-select: none;
-}
-.text-pressure span { display: inline-block; }
-.text-pressure .tp-accent { color: var(--c-red); }
 
 /* Text Type (skills title) */
 .tt-cursor { color: var(--c-green); animation: tt-blink 0.9s step-end infinite; margin-left: 2px; }

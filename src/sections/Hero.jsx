@@ -1,7 +1,6 @@
 import { useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SplineScene from '../components/SplineScene.jsx';
-import TextPressure from '../components/text/TextPressure.jsx';
 
 const REDUCED_MOTION =
   typeof window !== 'undefined' &&
@@ -45,10 +44,7 @@ export default function Hero() {
       <div className="wrap wrap-wide hero-grid">
         <div className="hero-text">
           <div className="kicker reveal">ML/AI Engineer · Bahrain</div>
-          <h1 className="reveal hero-name" aria-label="Adel Mithaiwala">
-            {/* "Mithaiwala" (from char index 5) wears the red candle */}
-            <TextPressure text="Adel Mithaiwala" accentFrom={5} minFontSize={40} decorative />
-          </h1>
+          <h1 className="hero-name">Adel <span>Mithaiwala</span></h1>
           <p className="lede reveal">
             Aspiring AI/ML engineer, passionate about reliable machine learning for real-world decisions.
           </p>

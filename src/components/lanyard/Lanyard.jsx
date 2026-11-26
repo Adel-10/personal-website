@@ -21,8 +21,8 @@ function srgb(tex) {
 function loadImage(name, onLoad) {
   const img = new Image();
   img.onload = () => onLoad(img);
-  img.onerror = () => {};
   img.src = `${import.meta.env.BASE_URL}assets/lanyard/${name}.png`;
+  return () => { img.onload = null; };
 }
 
 export default function Lanyard() {
@@ -46,7 +46,10 @@ export default function Lanyard() {
     camera.position.set(0, 0, 22);
 
     const pmrem = new THREE.PMREMGenerator(renderer);
-    scene.environment = pmrem.fromScene(new RoomEnvironment(), 0.04).texture;
+    const room = new RoomEnvironment();
+    const environment = pmrem.fromScene(room, 0.04);
+    room.dispose();
+    scene.environment = environment.texture;
     scene.add(new THREE.AmbientLight(0xffffff, 0.5));
     const dir = new THREE.DirectionalLight(0xffffff, 1.4);
     dir.position.set(3, 6, 8);
@@ -95,13 +98,15 @@ export default function Lanyard() {
     const back = new THREE.Mesh(faceGeo, backMat);
     back.rotation.y = Math.PI;
     back.position.z = -depth / 2 - 0.002;
-    loadImage('wordmark', img => {
-      frontMat.map = srgb(new THREE.CanvasTexture(makeFrontCanvasWith(img)));
-      frontMat.needsUpdate = true;
+    const stopWordmarkLoad = loadImage('wordmark', img => {
+      frontTex.image = makeFrontCanvasWith(img);
+      frontTex.needsUpdate = true;
+      requestFrame();
     });
-    loadImage('crest', img => {
-      backMat.map = srgb(new THREE.CanvasTexture(makeBackCanvasWith(img)));
-      backMat.needsUpdate = true;
+    const stopCrestLoad = loadImage('crest', img => {
+      backTex.image = makeBackCanvasWith(img);
+      backTex.needsUpdate = true;
+      requestFrame();
     });
 
     const ring = new THREE.Mesh(
@@ -122,12 +127,14 @@ export default function Lanyard() {
     strapTex.repeat.set(Math.max(2, Math.round(ropeLen / 1.5)), 1);
     const strapMat = new THREE.MeshStandardMaterial({ map: strapTex, roughness: 0.7 });
     let strapMesh = null;
-    loadImage('strap', img => {
+    const stopStrapLoad = loadImage('strap', img => {
       const t = srgb(new THREE.Texture(img));
       t.needsUpdate = true;
       t.wrapS = THREE.RepeatWrapping;
       t.repeat.copy(strapTex.repeat);
-      strapMat.map = t; strapMat.needsUpdate = true;
+      strapMat.map.dispose();
+      strapMat.map = t;
+      requestFrame();
     });
     function rebuildStrap() {
       const curve = new THREE.CatmullRomCurve3(pts);
@@ -163,6 +170,7 @@ export default function Lanyard() {
         holding = true;
         renderer.domElement.setPointerCapture(e.pointerId);
         renderer.domElement.style.cursor = 'grabbing';
+        wake();
       }
     }
     function onMove(e) {
@@ -172,19 +180,23 @@ export default function Lanyard() {
         // card follows the pointer exactly (kinematic while held, like the demo);
         // the rope stretches and snaps back naturally on release
         pts[N - 1].copy(hit).add(grabOffset);
+        wake();
       }
     }
     function onUp(e) {
+      if (!holding) return;
       holding = false;
       renderer.domElement.style.cursor = 'grab';
       if (renderer.domElement.hasPointerCapture?.(e.pointerId)) {
         renderer.domElement.releasePointerCapture(e.pointerId);
       }
+      wake();
     }
     renderer.domElement.addEventListener('pointerdown', onDown);
     renderer.domElement.addEventListener('pointermove', onMove);
     renderer.domElement.addEventListener('pointerup', onUp);
     renderer.domElement.addEventListener('pointercancel', onUp);
+    renderer.domElement.addEventListener('lostpointercapture', onUp);
 
     // ---------- simulation ----------
     const tmp = new THREE.Vector3();
@@ -218,16 +230,50 @@ export default function Lanyard() {
     }
 
     // ---------- loop ----------
-    const clock = new THREE.Clock();
-    let raf = 0;
-    let running = true;
+    let raf = null;
+    let nearViewport = false;
+    let moving = true;
+    let lastFrameTime = null;
+    let settledFor = 0;
     let swayY = 0;
     const lastPos = pts[N - 1].clone();
+    const previousFrame = pts.map(point => point.clone());
 
-    function frame() {
-      raf = requestAnimationFrame(frame);
-      if (!running) return;
-      const dt = Math.min(clock.getDelta(), 1 / 30);
+    function canRender() {
+      return nearViewport && !document.hidden;
+    }
+
+    function requestFrame() {
+      if (raf === null && canRender()) raf = requestAnimationFrame(frame);
+    }
+
+    function wake() {
+      moving = true;
+      settledFor = 0;
+      requestFrame();
+    }
+
+    function cancelFrame() {
+      if (raf !== null) cancelAnimationFrame(raf);
+      raf = null;
+      lastFrameTime = null;
+      settledFor = 0;
+    }
+
+    function frame(time) {
+      raf = null;
+      if (!canRender()) return;
+      if (moving) {
+        const dt = lastFrameTime === null ? 1 / 60 : Math.min((time - lastFrameTime) / 1000, 1 / 30);
+        lastFrameTime = time;
+        advanceRope(dt);
+      }
+      renderer.render(scene, camera);
+      if (moving) requestFrame();
+    }
+
+    function advanceRope(dt) {
+      pts.forEach((point, i) => previousFrame[i].copy(point));
 
       // two half-timestep substeps for stability (no artificial forces — the card
       // hangs perfectly still when settled, like the react-bits demo)
@@ -244,36 +290,54 @@ export default function Lanyard() {
       swayY += (THREE.MathUtils.clamp(-vx * 5, -1.1, 1.1) - swayY) * 0.1;
       cardGroup.rotation.set(0, swayY, rotZ);
 
-      renderer.render(scene, camera);
+      // Require a quiet stretch so a brief pause at the top of a swing keeps moving.
+      const maxDisplacement = 0.08 * dt;
+      const settled = !holding && Math.abs(swayY) < 0.002 &&
+        pts.every((point, i) => point.distanceToSquared(previousFrame[i]) < maxDisplacement ** 2);
+      settledFor = settled ? settledFor + dt : 0;
+      if (settledFor >= 0.3) {
+        moving = false;
+        lastFrameTime = null;
+        pts.forEach((point, i) => prev[i].copy(point));
+      }
     }
-    frame();
 
     // ---------- lifecycle ----------
-    const io = new IntersectionObserver(([e]) => { running = e.isIntersecting; }, { rootMargin: '10% 0px' });
+    function onVisibilityChange() {
+      if (canRender()) requestFrame();
+      else cancelFrame();
+    }
+    const io = new IntersectionObserver(([entry]) => {
+      nearViewport = entry.isIntersecting;
+      onVisibilityChange();
+    }, { rootMargin: '10% 0px' });
     io.observe(host);
-    const onVis = () => { running = !document.hidden; };
-    document.addEventListener('visibilitychange', onVis);
+    document.addEventListener('visibilitychange', onVisibilityChange);
     const ro = new ResizeObserver(() => {
       const w = host.clientWidth, h = host.clientHeight;
       if (!w || !h) return;
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      requestFrame();
     });
     ro.observe(host);
 
     return () => {
-      cancelAnimationFrame(raf);
+      cancelFrame();
+      stopWordmarkLoad(); stopCrestLoad(); stopStrapLoad();
       io.disconnect(); ro.disconnect();
-      document.removeEventListener('visibilitychange', onVis);
+      document.removeEventListener('visibilitychange', onVisibilityChange);
       renderer.domElement.removeEventListener('pointerdown', onDown);
       renderer.domElement.removeEventListener('pointermove', onMove);
       renderer.domElement.removeEventListener('pointerup', onUp);
       renderer.domElement.removeEventListener('pointercancel', onUp);
-      [bodyGeo, faceGeo, frontTex, backTex, strapTex].forEach(r => r.dispose());
+      renderer.domElement.removeEventListener('lostpointercapture', onUp);
+      [bodyGeo, faceGeo, frontTex, backTex, strapMat.map].forEach(r => r.dispose());
       if (strapMesh) strapMesh.geometry.dispose();
       ring.geometry.dispose();
       [bodyMat, frontMat, backMat, strapMat, ring.material].forEach(m => m.dispose());
+      environment.dispose();
       pmrem.dispose();
       renderer.dispose();
       host.removeChild(renderer.domElement);

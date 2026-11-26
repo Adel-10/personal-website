@@ -92,11 +92,11 @@ export default function RagProject() {
 
       <div className="figrow">
         <figure>
-          <img src="assets/English-prompt.png" alt="English question answered with citations from both English and Arabic sources" loading="lazy" />
+          <img src="assets/English-prompt.webp" width="1572" height="1418" alt="English question answered with citations from both English and Arabic sources" loading="lazy" />
           <figcaption>An English question answered from both versions of the same LMRA page: source [1] is the Arabic page (note the AR badge) and [3] the English one, because the answer draws on whichever version is ranked best.</figcaption>
         </figure>
         <figure>
-          <img src="assets/Out-of-corpus-prompt.png" alt="Out-of-corpus question triggering the fixed abstention template" loading="lazy" />
+          <img src="assets/Out-of-corpus-prompt.webp" width="1522" height="484" alt="Out-of-corpus question triggering the fixed abstention template" loading="lazy" />
           <figcaption>Out-of-corpus question → deterministic abstention template, no improvisation.</figcaption>
         </figure>
       </div>

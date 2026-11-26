@@ -2,6 +2,28 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v34 (Education lanyard sleep)
+
+- The lanyard stops simulating and rendering after it settles. Grabbing the card
+  wakes the simulation. Late artwork and resize redraw the card at its resting pose.
+- The loop pauses away from the viewport or in a hidden tab. Leaving Education
+  cancels pending redraws and releases the lanyard's textures and lighting target.
+- Verified in Chrome that the lanyard schedules zero frames at rest, wakes when
+  dragged, and stays visible after resizes and artwork updates.
+
+---
+
+# Portfolio handoff notes — v33 (static Home name and lighter Projects figures)
+
+- The Home name uses self-hosted Roboto Regular, a single 22 kB Latin WOFF2 from
+  Fontsource's Roboto 5.3.0 package. Removed the 250 kB Roboto Flex file from the
+  build, its package dependency, and the TextPressure effect.
+- Converted all four Projects figures to lossless WebP and added their intrinsic
+  dimensions. Verified the visible pixels match the original figures. The files
+  went from 548 kB to 147 kB combined. The original PNGs remain in `legacy/assets/`.
+
+---
+
 # Portfolio handoff notes — v32 (Projects counters and reduced motion)
 
 - Enabling reduced motion on Projects restores the original text of all 15 statistics,

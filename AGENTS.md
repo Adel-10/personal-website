@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v32). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v34). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -108,7 +108,6 @@ These are explicit decisions Adel made during development.
 | matter-js | FallingText title, Skill Signal Board |
 | @splinetool/react-spline + runtime | 3D robot on Home |
 | lucide-react | Icons in the Skill Signal Board |
-| @fontsource-variable/roboto-flex | Self-hosted variable font for TextPressure |
 
 `face-api.js` was **removed** in the security audit. The GridScan webcam feature it powered
 is gone.
@@ -129,7 +128,7 @@ src/
     SectionBackground.jsx  Lazy, visibility-gated React Bits backgrounds + Hyperspeed palette table
     RouteMetadata.jsx      Per-route title, description, canonical and social metadata
     backgrounds/           Vendored React Bits: LiquidEther, GridScan, DotGrid, Hyperspeed
-    text/                  React Bits text effect ports: TextPressure, DecryptedText, TextType, FallingText, CurvedLoop
+    text/                  React Bits text effect ports: DecryptedText, TextType, FallingText, CurvedLoop
     lanyard/               Custom three.js lanyard (Lanyard.jsx, kclTextures.js)
     ChapterIntro.jsx       Projects-page pinned chapter scenes
     ProjectSection.jsx     Project card wrapper (--pc candle per project)
@@ -144,7 +143,8 @@ src/
   useEducationScrolly.js   Education timeline scrollytelling
   useExperienceScrolly.js  Experience horizontal rides (any number of .xp-pin sections)
 public/
-  assets/                  Project figures (PNG) + robot intro poster (WebP)
+  assets/                  Project figures and robot intro poster (WebP)
+  assets/fonts/            Roboto Regular WOFF2 for the Home name and its OFL license
   assets/lanyard/          wordmark.png (front), crest.png (back): KCL images from Adel
   favicon.svg              Solid-red, single-candle favicon
   robots.txt               Allows indexing
@@ -194,8 +194,8 @@ legacy/                    Old single-file v2 site, kept for reference
 ### Home (`sections/Hero.jsx`)
 
 - Two-column `wrap-wide` grid.
-- **Left:** kicker "ML/AI Engineer · Bahrain", name as **TextPressure** (self-hosted Roboto Flex
-  variable font; "Mithaiwala" in candle red), two lede paragraphs, and five quick-links
+- **Left:** kicker "ML/AI Engineer · Bahrain", static name in self-hosted Roboto Regular
+  ("Mithaiwala" in candle red), two lede paragraphs, and five quick-links
   (each lights a different candle on hover).
 - **Right:** the **Spline robot** (`prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode`),
   which tracks the mouse. A soft orange glow follows the cursor only inside the robot's box.
@@ -264,7 +264,8 @@ legacy/                    Old single-file v2 site, kept for reference
 - **Lanyard:** a custom three.js verlet rope with no artificial forces (no idle breeze or
   wobble), gravity −40 and damping 0.99. The card front composites `wordmark.png`, the back
   composites `crest.png`, and the strap is canvas-drawn KCL red. Drawn fallbacks are used if
-  the images are missing.
+  the images are missing. The render loop stops once the rope settles or leaves the viewport.
+  Grabbing the card resumes the simulation. Resize and artwork loads redraw a resting card.
 
 ### Experience (`pages/Experience.jsx`, `useExperienceScrolly.js`)
 
@@ -301,7 +302,7 @@ legacy/                    Old single-file v2 site, kept for reference
 |---|---|---|
 | LiquidEther, DotGrid, Hyperspeed | React Bits registry | Themed via SectionBackground only |
 | GridScan | React Bits | **LOCAL PATCHES:** alpha fades with distance (upstream painted lines black on light backgrounds); webcam/face-api code removed entirely |
-| TextPressure, DecryptedText, TextType, FallingText, CurvedLoop | React Bits | Hand-ported; TextPressure uses locally bundled Roboto Flex; FallingText uses matter-js, builds DOM nodes rather than innerHTML, and requires pointer movement before starting |
+| DecryptedText, TextType, FallingText, CurvedLoop | React Bits | Hand-ported; FallingText uses matter-js, builds DOM nodes, and requires pointer movement before starting |
 | SplineScene | 21st.dev (serafim/splite) | Tailwind → CSS; error boundary; `onLoad` forwarded for the Home poster handoff |
 | WarpBackground, Cool Mode | Magic UI MCP | framer-motion → CSS keyframes; Cool Mode → delegated listener |
 | Lanyard | Original (React Bits-style behavior, no @react-three deps) | n/a |
@@ -342,8 +343,7 @@ tables in `SectionBackground.jsx` and must be kept in sync by hand.
   There is deliberately no CSP `<meta>` in `index.html`, because Vite injects inline styles
   during development. The production CSP still disallows inline `<style>` blocks.
 - **Allowed third-party runtime origins:** `prod.spline.design` for the robot scene and
-  `unpkg.com` for Spline's versioned modelling/navmesh WASM. Roboto Flex is bundled locally,
-  so the font needs no third-party origin.
+  `unpkg.com` for Spline's versioned modelling/navmesh WASM. Roboto Regular is served locally.
 
 ---
 
