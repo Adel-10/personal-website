@@ -866,6 +866,11 @@ figcaption { font-size: 13.5px; color: var(--text-dim); margin-top: 9px; }
 }
 .lanyard-canvas, .lanyard-canvas canvas { width: 100%; height: 100%; display: block; }
 .lanyard-canvas { position: absolute; inset: 0; }
+.lanyard-grip {
+  position: absolute; inset: 0; clip-path: inset(50%);
+  touch-action: none; cursor: grab;
+}
+.lanyard-canvas.is-dragging, .lanyard-canvas.is-dragging .lanyard-grip { cursor: grabbing; }
 .lanyard-fallback {
   position: absolute; left: 50%; top: 50%;
   transform: translate(-50%, -50%);

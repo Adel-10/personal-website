@@ -92,9 +92,8 @@ export default function FallingText({ text = '', highlightWords = [], gravity = 
     });
 
     const mouse = Mouse.create(container);
-    // Matter's wheel handlers block page scrolling over the container — remove them
-    mouse.element.removeEventListener('mousewheel', mouse.mousewheel);
-    mouse.element.removeEventListener('DOMMouseScroll', mouse.mousewheel);
+    // LOCAL PATCH: Matter 0.20 cancels native wheel scrolling; word dragging doesn't need it.
+    container.removeEventListener('wheel', mouse.mousewheel);
     const mc = MouseConstraint.create(engine, {
       mouse, constraint: { stiffness: 0.2, render: { visible: false } }
     });

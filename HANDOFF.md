@@ -2,6 +2,18 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v40 (Education scroll and artwork; deferred Home robot)
+
+- Active Education title physics no longer consumes the mouse wheel. Only the projected
+  lanyard card captures touch drags; swipes beside it scroll normally.
+- Replaced the KCL PNGs with lossless WebPs sized to their drawing areas (196 kB combined,
+  down from 849 kB). The drawn strap no longer requests a nonexistent image.
+- Home alone requests the opening poster; the live robot starts within 64px of the viewport.
+  Scrolling away and back keeps the same scene. Changing reduced motion switches between the
+  poster and live scene without reloading the page.
+
+---
+
 # Portfolio handoff notes — v39 (Education timeline endpoint)
 
 - Aligned the Education timeline track with the bottom of the final card.

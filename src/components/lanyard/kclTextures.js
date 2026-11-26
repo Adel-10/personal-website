@@ -1,10 +1,9 @@
 // KCL-branded card + strap artwork, drawn on canvas.
 // Real KCL images (any aspect ratio — they get composited, not stretched) go in
 // public/assets/lanyard/:
-//   wordmark.png — the red "King's College London" wordmark → card front
-//   crest.png    — the coat of arms → card back
-//   strap.png    — optional, ~1024x128, tiles along the strap
-// Lanyard.jsx loads those if present and falls back to the fully drawn versions.
+//   wordmark.webp — the red "King's College London" wordmark → card front
+//   crest.webp    — the coat of arms → card back
+// The strap is always drawn locally; drawn card faces also serve as fallbacks.
 
 export const KCL_RED = '#e2231b';
 const KCL_RED_DARK = '#b3160f';

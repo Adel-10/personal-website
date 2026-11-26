@@ -21,7 +21,7 @@ function srgb(tex) {
 function loadImage(name, onLoad) {
   const img = new Image();
   img.onload = () => onLoad(img);
-  img.src = `${import.meta.env.BASE_URL}assets/lanyard/${name}.png`;
+  img.src = `${import.meta.env.BASE_URL}assets/lanyard/${name}.webp`;
   return () => { img.onload = null; };
 }
 
@@ -37,8 +37,6 @@ export default function Lanyard() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(host.clientWidth, host.clientHeight);
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.domElement.style.touchAction = 'none';
-    renderer.domElement.style.cursor = 'grab';
     host.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -127,15 +125,6 @@ export default function Lanyard() {
     strapTex.repeat.set(Math.max(2, Math.round(ropeLen / 1.5)), 1);
     const strapMat = new THREE.MeshStandardMaterial({ map: strapTex, roughness: 0.7 });
     let strapMesh = null;
-    const stopStrapLoad = loadImage('strap', img => {
-      const t = srgb(new THREE.Texture(img));
-      t.needsUpdate = true;
-      t.wrapS = THREE.RepeatWrapping;
-      t.repeat.copy(strapTex.repeat);
-      strapMat.map.dispose();
-      strapMat.map = t;
-      requestFrame();
-    });
     function rebuildStrap() {
       const curve = new THREE.CatmullRomCurve3(pts);
       const geo = new THREE.TubeGeometry(curve, 24, 0.065, 8, false);
@@ -150,11 +139,26 @@ export default function Lanyard() {
     rebuildStrap();
 
     // ---------- drag ----------
+    // The browser decides whether to pan at touch-down. Restrict touch-action:none
+    // to the projected card, leaving the surrounding canvas free for native scrolling.
+    const handle = document.createElement('div');
+    handle.className = 'lanyard-grip';
+    host.appendChild(handle);
+    const corners = [[-hw, hh], [hw, hh], [hw, -hh], [-hw, -hh]];
+    const corner = new THREE.Vector3();
+    function positionHandle() {
+      const points = corners.map(([x, y]) => {
+        corner.set(x, y, 0).applyMatrix4(cardBody.matrixWorld).project(camera);
+        return `${(corner.x + 1) * 50}% ${(1 - corner.y) * 50}%`;
+      });
+      handle.style.clipPath = `polygon(${points.join(',')})`;
+    }
     const raycaster = new THREE.Raycaster();
     const pointer = new THREE.Vector2();
     const dragPlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
     const hit = new THREE.Vector3();
     let holding = false;
+    let dragId = null;
     const grabOffset = new THREE.Vector3();
 
     function setPointer(e) {
@@ -163,18 +167,20 @@ export default function Lanyard() {
       raycaster.setFromCamera(pointer, camera);
     }
     function onDown(e) {
+      if (holding || e.button !== 0) return;
       setPointer(e);
-      if (raycaster.intersectObject(cardGroup, true).length) {
+      if (e.target === handle || raycaster.intersectObject(cardGroup, true).length) {
         raycaster.ray.intersectPlane(dragPlane, hit);
         grabOffset.copy(pts[N - 1]).sub(hit);
         holding = true;
-        renderer.domElement.setPointerCapture(e.pointerId);
-        renderer.domElement.style.cursor = 'grabbing';
+        dragId = e.pointerId;
+        host.setPointerCapture(dragId);
+        host.classList.add('is-dragging');
         wake();
       }
     }
     function onMove(e) {
-      if (!holding) return;
+      if (e.pointerId !== dragId) return;
       setPointer(e);
       if (raycaster.ray.intersectPlane(dragPlane, hit)) {
         // card follows the pointer exactly (kinematic while held, like the demo);
@@ -184,19 +190,20 @@ export default function Lanyard() {
       }
     }
     function onUp(e) {
-      if (!holding) return;
+      if (e.pointerId !== dragId) return;
       holding = false;
-      renderer.domElement.style.cursor = 'grab';
-      if (renderer.domElement.hasPointerCapture?.(e.pointerId)) {
-        renderer.domElement.releasePointerCapture(e.pointerId);
+      dragId = null;
+      host.classList.remove('is-dragging');
+      if (host.hasPointerCapture(e.pointerId)) {
+        host.releasePointerCapture(e.pointerId);
       }
       wake();
     }
-    renderer.domElement.addEventListener('pointerdown', onDown);
-    renderer.domElement.addEventListener('pointermove', onMove);
-    renderer.domElement.addEventListener('pointerup', onUp);
-    renderer.domElement.addEventListener('pointercancel', onUp);
-    renderer.domElement.addEventListener('lostpointercapture', onUp);
+    host.addEventListener('pointerdown', onDown);
+    host.addEventListener('pointermove', onMove);
+    host.addEventListener('pointerup', onUp);
+    host.addEventListener('pointercancel', onUp);
+    host.addEventListener('lostpointercapture', onUp);
 
     // ---------- simulation ----------
     const tmp = new THREE.Vector3();
@@ -269,6 +276,7 @@ export default function Lanyard() {
         advanceRope(dt);
       }
       renderer.render(scene, camera);
+      positionHandle();
       if (moving) requestFrame();
     }
 
@@ -325,15 +333,17 @@ export default function Lanyard() {
 
     return () => {
       cancelFrame();
-      stopWordmarkLoad(); stopCrestLoad(); stopStrapLoad();
+      stopWordmarkLoad(); stopCrestLoad();
       io.disconnect(); ro.disconnect();
       document.removeEventListener('visibilitychange', onVisibilityChange);
-      renderer.domElement.removeEventListener('pointerdown', onDown);
-      renderer.domElement.removeEventListener('pointermove', onMove);
-      renderer.domElement.removeEventListener('pointerup', onUp);
-      renderer.domElement.removeEventListener('pointercancel', onUp);
-      renderer.domElement.removeEventListener('lostpointercapture', onUp);
-      [bodyGeo, faceGeo, frontTex, backTex, strapMat.map].forEach(r => r.dispose());
+      host.removeEventListener('pointerdown', onDown);
+      host.removeEventListener('pointermove', onMove);
+      host.removeEventListener('pointerup', onUp);
+      host.removeEventListener('pointercancel', onUp);
+      host.removeEventListener('lostpointercapture', onUp);
+      host.classList.remove('is-dragging');
+      handle.remove();
+      [bodyGeo, faceGeo, frontTex, backTex, strapTex].forEach(r => r.dispose());
       if (strapMesh) strapMesh.geometry.dispose();
       ring.geometry.dispose();
       [bodyMat, frontMat, backMat, strapMat, ring.material].forEach(m => m.dispose());

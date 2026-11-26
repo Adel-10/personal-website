@@ -1,11 +1,6 @@
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import SplineScene from '../components/SplineScene.jsx';
-
-const REDUCED_MOTION =
-  typeof window !== 'undefined' &&
-  window.matchMedia &&
-  window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 // Home hero — text left, interactive 3D robot (Spline, via 21st.dev SplineScene) right.
 // A soft light follows the cursor inside the robot's area only (the robot tracks the
@@ -14,6 +9,36 @@ export default function Hero() {
   const splineRef = useRef(null);
   const glowRef = useRef(null);
   const posterRef = useRef(null);
+  const [loadScene, setLoadScene] = useState(false);
+
+  useEffect(() => {
+    const box = splineRef.current;
+    const motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+    let observer;
+    function watch() {
+      observer?.disconnect();
+      if (motion.matches) {
+        box.classList.remove('is-ready');
+        setLoadScene(false);
+        return;
+      }
+      // Start just before the box enters view. Once started, scrolling it away
+      // and back must not reload the runtime or replay the opening animation.
+      observer = new IntersectionObserver(([entry], current) => {
+        if (!entry.isIntersecting || motion.matches || current !== observer) return;
+        setLoadScene(true);
+        current.disconnect();
+      }, { rootMargin: '64px 0px' });
+      observer.observe(box);
+    }
+    watch();
+    motion.addEventListener('change', watch);
+    return () => {
+      observer?.disconnect();
+      observer = null;
+      motion.removeEventListener('change', watch);
+    };
+  }, []);
 
   function onGlowMove(e) {
     const box = splineRef.current;
@@ -68,7 +93,7 @@ export default function Hero() {
           ref={splineRef}
           onMouseMove={onGlowMove}
         >
-          {!REDUCED_MOTION && (
+          {loadScene && (
             <SplineScene
               scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
               className="spline-canvas"
@@ -86,7 +111,7 @@ export default function Hero() {
             fetchPriority="high"
             draggable="false"
           />
-          {!REDUCED_MOTION && <div className="spline-glow" ref={glowRef} />}
+          {loadScene && <div className="spline-glow" ref={glowRef} />}
         </div>
       </div>
     </header>

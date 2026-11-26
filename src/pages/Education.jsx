@@ -13,7 +13,7 @@ function StaticCard() {
     try {
       return makeFrontCanvas().toDataURL('image/png');
     } catch {
-      return `${import.meta.env.BASE_URL}assets/lanyard/wordmark.png`;
+      return `${import.meta.env.BASE_URL}assets/lanyard/wordmark.webp`;
     }
   });
   return <img className="lanyard-fallback" src={src} alt="King's College London student card" />;

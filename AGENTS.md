@@ -1,7 +1,7 @@
 # Adel Mithaiwala — Portfolio Website: Agent Brief
 
 Single source of truth for any AI agent picking up this project. Read this first.
-`HANDOFF.md` is the chronological changelog (v3 → v39). Its older entries are **partly
+`HANDOFF.md` is the chronological changelog (v3 → v40). Its older entries are **partly
 stale**: the skill tree, ball pit and tool sphere it describes are no longer on the site.
 Where the two disagree, this file wins.
 
@@ -145,7 +145,7 @@ src/
 public/
   assets/                  Project figures and robot intro poster (WebP)
   assets/fonts/            Roboto Regular WOFF2 for the Home name and its OFL license
-  assets/lanyard/          wordmark.png (front), crest.png (back): KCL images from Adel
+  assets/lanyard/          wordmark.webp (front), crest.webp (back): KCL images from Adel
   favicon.svg              Solid-red, single-candle favicon
   robots.txt               Allows indexing
 legacy/                    Old single-file v2 site, kept for reference
@@ -170,8 +170,10 @@ legacy/                    Old single-file v2 site, kept for reference
 - **Grid Scan:** Projects uses the direct Three.js shader renderer only. Its unused
   post-processing path was removed locally, so Projects does not fetch that dependency;
   Hyperspeed still uses and loads `postprocessing` on Experience.
-- **Spline cold-load poster:** Home preloads a 41 kB transparent capture of the paused
-  opening canvas. The poster scales by height and clips at the sides to match the live
+- **Spline cold-load poster:** Only Home requests the high-priority 41 kB transparent
+  poster. Spline mounts once the robot box is within 64px of the viewport and stays mounted
+  while scrolling. Enabling reduced motion switches back to the poster immediately.
+  The poster scales by height and clips at the sides to match the live
   camera. The original zoom-out resumes once the fade finishes. The poster stays visible when
   reduced motion skips Spline or if the scene fails to load.
 - **PageHeader:**
@@ -199,7 +201,7 @@ legacy/                    Old single-file v2 site, kept for reference
   (each lights a different candle on hover).
 - **Right:** the **Spline robot** (`prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode`),
   which tracks the mouse. A soft orange glow follows the cursor only inside the robot's box.
-- A preloaded WebP of the scene's opening close-up prevents a blank cold-load box and
+- An eager WebP of the scene's opening close-up prevents a blank cold-load box and
   fades into the live canvas before the zoom-out continues. Under reduced motion or if Spline
   fails to load, the poster remains as the static fallback.
 
@@ -250,7 +252,7 @@ legacy/                    Old single-file v2 site, kept for reference
 
 - **Header:** green Dot Grid with the title as **FallingText**. Moving the pointer over a
   word starts the drop. **↺ restart** sits below the physics area and restores the
-  title. The physics area keeps its pre-drop height when the words animate.
+  title. The physics area keeps its pre-drop height and allows native wheel scrolling.
 - **Body:** the timeline line draws on scroll and finishes at the bottom of the final card.
   Reduced motion shows the completed line. Year stamps pop in. **The KCL lanyard rides
   sticky on the right.**
@@ -262,10 +264,11 @@ legacy/                    Old single-file v2 site, kept for reference
 - Reaching milestone 3 fires a **confetti burst**.
 - The master's "next" card and the stats strip were **removed at Adel's request**.
 - **Lanyard:** a custom three.js verlet rope with no artificial forces (no idle breeze or
-  wobble), gravity −40 and damping 0.99. The card front composites `wordmark.png`, the back
-  composites `crest.png`, and the strap is canvas-drawn KCL red. Drawn fallbacks are used if
+  wobble), gravity −40 and damping 0.99. The card front composites `wordmark.webp`, the back
+  composites `crest.webp`, and the strap is canvas-drawn KCL red. Drawn fallbacks are used if
   the images are missing. The render loop stops once the rope settles or leaves the viewport.
-  Grabbing the card resumes the simulation. Resize and artwork loads redraw a resting card.
+  Grabbing the card resumes the simulation. A touch target follows the card so swipes in the
+  empty canvas scroll the page. Resize and artwork loads redraw a resting card.
 
 ### Experience (`pages/Experience.jsx`, `useExperienceScrolly.js`)
 
