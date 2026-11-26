@@ -28,7 +28,6 @@ export default function Education() {
   return (
     <main id="main-content" className="page" ref={main} tabIndex="-1">
       <PageHeader
-        tag="Education"
         title={
           <FallingText
             text="Education — first-class degree, foundation year, top of class"

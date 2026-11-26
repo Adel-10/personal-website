@@ -2,6 +2,13 @@
 > chronological changelog, and older entries describe things since replaced (e.g. the
 > Skills page is now the Skill Signal Board, not the skill tree).
 
+# Portfolio handoff notes — v35 (section labels)
+
+- Removed “Capabilities” and “Capability console” from Skills, the small “Education”
+  label above its hero, and “Experience”, “Ride 1” and “Ride 2” from Experience.
+
+---
+
 # Portfolio handoff notes — v34 (Education lanyard sleep)
 
 - The lanyard stops simulating and rendering after it settles. Grabbing the card

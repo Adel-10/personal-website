@@ -12,7 +12,6 @@ export default function Experience() {
   return (
     <main id="main-content" className="page" ref={main} tabIndex="-1">
       <PageHeader
-        tag="Experience"
         title={
           <CurvedLoop marqueeText="Experience ✦ KPMG ✦ Batelco ✦ King's ✦" curveAmount={110} />
         }
@@ -24,7 +23,6 @@ export default function Experience() {
       {/* ===== ride 1: professional ===== */}
       <section className="xp" id="experience">
         <div className="wrap xp-heading">
-          <div className="sec-tag reveal">Ride 1</div>
           <h2 className="reveal">Professional experience</h2>
         </div>
         <div className="xp-pin">
@@ -63,7 +61,6 @@ export default function Experience() {
       {/* ===== ride 2: leadership ===== */}
       <section className="xp" id="leadership">
         <div className="wrap xp-heading">
-          <div className="sec-tag reveal">Ride 2</div>
           <h2 className="reveal">Leadership experience</h2>
         </div>
         <div className="xp-pin">

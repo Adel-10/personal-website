@@ -277,7 +277,6 @@ export default function SkillSignalBoard() {
       <div className="wrap wrap-wide">
         <div className="skillboard-heading reveal">
           <div>
-            <div className="sec-tag">Capability console</div>
             <h2>Skill signal board</h2>
           </div>
         </div>

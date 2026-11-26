@@ -8,7 +8,6 @@ export default function Skills() {
   return (
     <main id="main-content" className="page" tabIndex="-1">
       <PageHeader
-        tag="Capabilities"
         title={<TextType texts={[
           'The skill signal board',
           'Pull on the system',
